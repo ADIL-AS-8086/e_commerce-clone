@@ -563,7 +563,7 @@ const OrderList = async (req, res) => {
     try {
         const Orderdata = await order.find().populate('Items.productId UserId ReturnRequest').sort({ OrderDate: 'desc' });;
 
-        res.render('./admin/orderList', { Orderdata });
+        res.render('./admin/orderlist', { Orderdata });
     } catch (error) {
         console.error('MongoDB Error:', error);
         res.status(500).send('Internal Server Error');
