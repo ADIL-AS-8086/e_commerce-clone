@@ -61,7 +61,6 @@ router.post('/addprofilepic', userAuth.verifyUser,uploadProfile.single('profileI
 
 
 
-
 // userartgetpageroute
 
 router.get('/user/user-cart',userAuth.verifyUser,cartController.cartpage)

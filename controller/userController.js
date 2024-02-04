@@ -763,7 +763,7 @@ const downloadInvoice = async (req, res) => {
   console.log('checking invoice to download');
   try {
     const id = req.params.orderId;
-    const filePath = `D:\\specmen\\public\\pdf\\${id}.pdf`;
+    const filePath = `/home/ubuntu/e_commerce-clone//public//pdf//${id}.pdf`;
 
     console.log('checking invoice to download iniside the try bloack so please ' );
 
