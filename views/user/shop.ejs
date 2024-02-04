@@ -1,0 +1,397 @@
+<%- include('../partials/usernav')%>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .image-banner-container {
+            position: relative;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .image-banner {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .card-container {
+            width: 18rem;
+            height: 20.25rem;
+            background-color: #F1F2F7;
+            position: relative;
+            border: 0;
+            border-radius: 0;
+            overflow: hidden;
+
+        }
+
+        .icon-heart,
+        .icon-cart {
+            position: absolute;
+            font-size: 24px;
+            color: #000;
+            z-index: 1;
+        }
+
+        .icon-heart {
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+        }
+
+        .icon-cart {
+            bottom: 10px;
+            left: 10px;
+            font-size: 12px;
+        }
+
+        .additional-info {
+            background-color: #fff;
+            padding: 1rem;
+            margin-top: 1px;
+            width: calc(100% - 20px);
+            margin-left: 10px;
+            z-index: 0;
+            position: relative;
+        }
+
+        .additional-info p {
+            font-size: 11.5px;
+            font-weight: 300;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            margin: 0;
+            margin-top: 5px;
+        }
+
+        .custom-card-container {
+            width: 12rem;
+            height: 16.25rem;
+            background-color: #ffffff;
+            /* Updated to pure white */
+            position: relative;
+            border: 0;
+            border-radius: 0;
+            overflow: hidden;
+            filter: blur(10px 30px) blur(42px);
+            transition: transform 0.3s;
+        }
+
+        .custom-card-container:hover {
+            transform: scale(1.05);
+            box-shadow: 10px 30px 42px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-icon-heart,
+        .custom-icon-cart {
+            position: absolute;
+            font-size: 24px;
+            color: #000000;
+
+        }
+
+        .custom-icon-heart {
+            bottom: 10px;
+            right: 10px;
+            font-size: 10px;
+        }
+
+        .custom-icon-cart {
+            bottom: 10px;
+            left: 10px;
+            font-size: 12px;
+        }
+
+        .custom-additional-info {
+            background-color: #fff;
+            padding: 1rem;
+            margin-top: 1px;
+            width: 12rem;
+            margin-left: 10px;
+        }
+
+        .custom-additional-info p {
+            font-size: 11.5px;
+            font-weight: 300;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            margin: 0;
+            margin-left: 0;
+            margin-top: 0;
+        }
+
+
+        .custom-p {
+            margin-left: 25px;
+        }
+
+        .text-uppercase a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .text-uppercase a:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+        .text-white a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .text-white a:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+        .view-all-button-container {
+            text-align: center;
+        }
+
+        .view-all-button {
+            background-color: white;
+            border: 1px solid black;
+            color: black;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Arrow Icon Styles */
+        .view-all-button i {
+            margin-left: 5px;
+
+        }
+        .filter-div {
+    height: auto;
+    width: 250px;
+    background-color: #ffffff;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    position: absolute;
+    z-index: 10;
+    margin-top: 15px;
+    padding: 25px;
+    padding-top: 33px;
+    font-size: larger;
+    border-radius: 5px;
+    /* margin-left: 17px; */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 28px 5px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+
+}
+
+
+.filter-div.show-filter {
+    transform: translateX(0);
+}
+    </style>
+
+
+    <div class="container-fluid">
+
+        <div style="margin-left: 34px;">
+            <h4>Our Products</h4>
+        </div>
+
+        <button id="filterButton" style="width: 101px; border: 0; border-radius: 5px;">Filter</button>
+
+
+
+
+
+        <div class="filter-div">
+            <h6 style="font-weight: 600;">Select brand for Filter</h6>
+                <% categoryData.forEach(data => { %>
+                    <form action="/user/productsfilter" method="post">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="<%=data._id%>" name="category">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        <%=data.categoryname%>
+                    </label>
+                </div>
+                <% }) %>
+                <h6>Sort by Price:</h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="priceSort" id="priceHighToLow" value="highToLow">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Price High to Low
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="priceSort" id="priceLowToHigh" value="lowToHigh">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Price Low to High
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">apply </button>
+            </div>
+        </form>
+            
+        </div>
+
+
+
+
+        <div class="row">
+            <% proctData.forEach((data)=> { %>
+                <% if (data.Status==true) { %>
+                    <div class="col-md-3">
+                        <div class="custom-card-container ms-5 mt-5">
+                            <a href="#" class="custom-icon-heart" data-product-id="<%= data._id %>"><i
+                                    class="fa-regular fa-heart"></i></a>
+
+
+
+                            <a href="#" class="custom-icon-cart" data-product-id="<%= data._id %>"><i
+                                    class="fas fa-cart-plus"></i></a>
+                            <a href="/user/product-view/<%= data._id %>">
+                                <img class="card-img-top" src="/productimages/<%= data.images[0].filename %>"
+                                    alt="Card image cap">
+                            </a>
+                        </div>
+                        <div class="custom-additional-info ms-5">
+                            <p>
+                                <%= data.name %>
+                            </p>
+                            <% if (data.offer && data.offer.discountPercentage> 0) { %>
+                                <div class="offer-container">
+                                    <p class="custom-p"
+                                        style="font-weight: bolder; display: inline-block; background-color: yellow; color: black;">
+                                        ₹ <%= data.Discountedprice %>
+                                    </p>
+                                    <p class="custom-p"
+                                        style="font-weight: bolder; display: inline-block; background-color: yellow; color: black;">
+                                        <%= data.offer.discountPercentage %>% Off
+                                    </p>
+                                    <p class="original-price"
+                                        style="text-decoration: line-through; color: black; display: inline-block; margin-left: 5px;">
+                                        ₹ <%= data.price %>
+                                    </p>
+                                </div>
+                                <% } else { %>
+                                    <p class="custom-p" style="margin-left: 40px; font-weight: bolder;">₹ <%= data.price
+                                            %>
+                                    </p>
+                                    <% } %>
+                        </div>
+                    </div>
+                    <% } %>
+                        <% }) %>
+
+                        <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+                            <ul class="pagination">
+                              <li class="page-item">
+                                <a class="page-link" href="/user/shop?page=<%= page - 1 %>" style="color: black;" aria-label="Previous">
+                                  <span aria-hidden="true">&laquo;</span>
+                                </a>
+                              </li>
+                              <% for(let i = 1; i <= productsCount; i++) { %>
+                                <li class="page-item">
+                                  <a class="page-link" href="/user/shop?page=<%= i %>" style="color: black;"><%= i %></a>
+                                </li>
+                              <% } %>
+                              <li class="page-item">
+                                <a class="page-link" href="/user/shop?page=<%= page + 1 %>" style="color: black;" aria-label="Next">
+                                  <span aria-hidden="true">&raquo;</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </nav>
+        </div>
+    </div>
+
+    <SCript>
+            document.addEventListener('DOMContentLoaded', function () {
+              
+              const filterButton = document.getElementById('filterButton');
+              const filterDiv = document.querySelector('.filter-div');
+
+              filterButton.addEventListener('click', function () {
+                  filterDiv.classList.toggle('show-filter');
+              });
+             }); 
+    </SCript>
+
+    <script>
+
+
+
+
+
+
+let category = []
+    const categoriescheckbox = document.querySelectorAll("input[name=category]")
+
+
+    categoriescheckbox.forEach((input) => {
+        { input.addEventListener('change', updateProductList) }
+    })
+
+
+
+    
+        
+        console.log('adil, UWWWWWQIRHIQWO8ana ');
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('adil');
+            const cartIcons = Array.from(document.getElementsByClassName('custom-icon-heart'));
+            console.log('FFFFFFFFFFWJDFQBzaaaaaaaaaaaaaaa');
+            console.log(cartIcons);
+            
+            function showToast(message) {
+                Toastify({
+                    text: message,
+                    className: "success",
+                    position: 'center',
+                    gravity: "top",
+                    duration: 3000,
+                    style: {
+                        background: "white",
+                        color: "#000",
+                        marginTop: "80px",
+                    }
+                }).showToast();
+            }
+    
+            cartIcons.forEach(data => {
+    
+                data.addEventListener('click', async (event) => {
+                    console.log('Click event triggered');
+                    event.preventDefault();
+    
+                    const productId = data.getAttribute('data-product-id');
+                    console.log('zaaaaaaaaaaaaaaa');
+                    console.log('Product ID:', productId);
+    
+                    try {
+                        const response = await fetch(`/user/addto-wishlist/${productId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ productId }),
+                        });
+    
+                        if (response.ok) {
+                            const heartIcon = data.parentElement.querySelector('.custom-icon-heart');
+                            heartIcon.style.color = 'red';
+                            showToast('Item Added to wishlist successfully ');
+                            console.log('Product added to wishlist successfully');
+                        } else {
+                            console.error('Failed to add product to wishlist');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    
+    </script>
+
+
+    
+
+    <%- include('../partials/userlogfoter')%>

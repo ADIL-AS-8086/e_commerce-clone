@@ -1,0 +1,54 @@
+<%- include('../partials/usernav')%>
+<link rel="stylesheet" href="/style/card.css">
+
+<style>
+    body {
+        overflow-x: hidden;
+    }
+</style>
+
+<div class="container-fluid">
+    <div style="margin-left: 34px;">
+        <h1><%= categories.categoryname %></h1>
+    </div>
+
+    <div class="row">
+        <% products.forEach((data) => { %>
+            <% if (data.Status == true) { %>
+                <div class="col-md-3">
+                    <div class="custom-card-container ms-5 mt-5">
+                        <a href="#" class="custom-icon-heart"><i class="fa-regular fa-heart"></i></a>
+                        <a href="#" class="custom-icon-cart"><i class="fas fa-cart-plus"></i></a>
+                        <a href="/user/product-view/<%= data._id %>">
+                            <img class="card-img-top" src="/productimages/<%= data.images[0].filename %>"
+                                alt="Card image cap">
+                        </a>
+                    </div>
+                    <div class="custom-additional-info ms-5">
+                        <p><%= data.name %></p>
+                        <% if (data.offer && data.offer.discountPercentage > 0) { %>
+                            <div class="offer-container">
+                                <p class="custom-p"
+                                    style="font-weight: bolder; display: inline-block; background-color: yellow; color: black;">
+                                    ₹ <%= data.Discountedprice %>
+                                </p>
+                                <p class="custom-p"
+                                    style="font-weight: bolder; display: inline-block; background-color: yellow; color: black;">
+                                    <%= data.offer.discountPercentage %>% Off
+                                </p>
+                                <p class="original-price"
+                                    style="text-decoration: line-through; color: black; display: inline-block; margin-left: 5px;">
+                                    ₹ <%= data.price %>
+                                </p>
+                            </div>
+                        <% } else { %>
+                            <p class="custom-p" style="margin-left: 40px; font-weight: bolder;">₹ <%= data.price %></p>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        <% }) %>
+    </div>
+</div>
+
+<%- include('../partials/userlogfoter')%>

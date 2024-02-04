@@ -1,0 +1,74 @@
+<%- include('../partials/usernav')%>
+<h1 style="margin-left: 100px;">Available Coupons</h1>
+
+<script>
+    function copyToClipboard(couponCode, couponId) {
+        const el = document.createElement('textarea');
+        el.value = couponCode;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        const copyText = document.getElementById('copyText' + couponId);
+        if (copyText) {
+            copyText.textContent = 'Coupon Code Copied!';
+        }
+    }
+</script>
+
+<div class="container-fluid">
+    <div class="row p-5">
+        <div class="d-flex justify-content-center">
+            <h1>Coupons</h1>
+        </div>
+        <% Newcoupon.forEach((coupons) => { %>
+            <div class="col-md-4 p-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Coupon Code: <%= coupons.couponCode %></h5>
+                        <p class="card-text" id="copyText<%= coupons._id %>">Copy Coupon Code</p>
+                        <button class="btn btn-primary" onclick="copyToClipboard('<%= coupons.couponCode %>', '<%= coupons._id %>')">Copy Code</button>
+                        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#couponModal<%= coupons._id %>">Terms & Conditions</button>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <% if (currentDate < coupons.endDate) { %>
+                            <% let dte = new Date(coupons.endDate) %>
+                            <p class="card-text">EXPIRES ON: <%= dte.getDate() %>/<%= dte.getMonth() + 1 %>/<%= dte.getFullYear() %> </p>
+                        <% } else { %>
+                            <% let de = new Date(coupons.endDate) %>
+                            <p class="card-text text-danger">EXPIRED ON: <%= de.getDate() %>/<%= de.getMonth() + 1 %>/<%= de.getFullYear() %> </p>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="couponModal<%= coupons._id %>" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="couponModalLabel">Coupon Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Coupon Name: <%= coupons.couponName %></p>
+                                <p>Coupon Code: <%= coupons.couponCode %></p>
+                                <p>Discount Type: <%= coupons.discountType %></p>
+                                <p>Limit(coupon per user): <%= coupons.limit %></p>
+                                <p>Start Date: 
+                                    <% let dt=new Date(coupons.startDate)%>
+                                    <%=dt.getDate()%>/<%=dt.getMonth()+1%>/<%=dt.getFullYear()%>  
+                                </p>
+                                <p>Expires On:
+                                    <% let dte=new Date(coupons.endDate)%>
+                                    <%=dte.getDate()%>/<%=dte.getMonth()+1%>/<%=dte.getFullYear()%>  
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<%- include('../partials/userlogfoter')%>

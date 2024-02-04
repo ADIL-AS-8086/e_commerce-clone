@@ -1,0 +1,94 @@
+<%- include('../partials/adminHeader') %>
+
+<style>
+  .error-message {
+    color: red;
+    font-size: 14px;
+  }
+</style>
+
+<div class="container mt-5" style="margin-left: 200px; width: 800px;">
+  <div class="card shadow p-4 bg-white">
+    <form action="/admin/toaddCatogery" method="post" enctype="multipart/form-data">
+    
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="inputEmail4" class="form-label">Category Name</label>
+          <input class="form-control" name="name" id="categoryName" pattern="[a-zA-Z]+(\s*[a-zA-Z]+)*" title="Category name must be at least 2 letters and contain only letters, with no leading or trailing spaces." required>
+  
+          <p class="error-message" id="alertMessage"><%= alertMessage %></p>
+        </div>
+        <div class="col-md-6">
+          <label for="productImage1" class="form-label">Image 1</label>
+          <input type="file" class="form-control" name="image" accept="image/*" id="productImage1">
+          <% var imageErrorMessage = imageErrorMessage || ''; %>
+          <p class="error-message" id="imageErrorMessage"><%= imageErrorMessage %></p>
+        </div>
+      </div>
+
+      <!-- Add Category Button -->
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <button class="btn btn-dark" id="addCategoryButton">Add Category</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.getElementById('addCategoryButton').addEventListener('click', function () {
+    validateCategoryName();
+    validateImage();
+  });
+
+  function validateCategoryName() {
+    const categoryNameInput = document.getElementById('categoryName');
+    const alertMessage = document.getElementById('alertMessage');
+
+    if (!categoryNameInput.checkValidity()) {
+      alertMessage.textContent = 'Category name must be at least 2 letters and contain only letters.';
+    } else {
+      alertMessage.textContent = '';
+    }
+  }
+  // Hide the alert message after 5 seconds
+  setTimeout(function () {
+    alertMessage.textContent = '';
+  }, 5000);
+
+  // Validate category name on input change
+  document.getElementById('categoryName').addEventListener('input', function () {
+    validateCategoryName();
+  });
+
+  function validateImage() {
+    const imageInput = document.getElementById('productImage1');
+    const imageErrorMessage = document.getElementById('imageErrorMessage');
+
+    // Validate image
+    if (!imageInput.files || imageInput.files.length === 0) {
+      imageErrorMessage.textContent = 'Please select an image.';
+      return;
+    } else {
+      imageErrorMessage.textContent = '';
+    }
+
+    // Get the selected file
+    const selectedFile = imageInput.files[0];
+
+    // Validate file type
+    if (!selectedFile.type.startsWith('image/')) {
+      imageErrorMessage.textContent = 'Invalid file type. Please upload an image file.';
+    } else if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml', 'image/tiff', 'image/avif'].includes(selectedFile.type)) {
+      imageErrorMessage.textContent = 'Please add a valid image with supported formats (JPEG, PNG, WebP, GIF, SVG, TIFF, AVIF).';
+    } else {
+      imageErrorMessage.textContent = '';
+    }
+  }
+  setTimeout(function () {
+    imageErrorMessage.textContent = '';
+  }, 5000);
+</script>
+
+<%- include('../partials/adminFooter') %>

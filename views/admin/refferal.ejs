@@ -1,0 +1,23 @@
+<%- include('../partials/adminHeader') %>
+<div class="card" style="width: 400px; margin-left: 250px; margin-top: 100px;">
+    <div class="card-body">
+        <h2 class="card-title">Referral Amount Management</h2>
+
+        <form class="row g-3" method="POST" action="/admin/updateReferralAmount">
+            <div class="col-md-12 text-center">
+                <label for="refferalAmount" class="form-label">Edit Referral Amount</label>
+                <input class="form-control" id="refferalAmount" value="<%= newrefferal.amount %>" type="number" min="0" max="1000" name="refferalAmount" required>
+            </div>
+
+            <div class="col-12 mt-4">
+                <div class="d-flex justify-content-around">
+                    <button type="submit" class="btn btn-primary">Update Referral Amount</button>
+                    <a href="" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<%- include('../partials/adminFooter')%>

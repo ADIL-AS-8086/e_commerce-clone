@@ -1,0 +1,395 @@
+<%- include('../partials/adminHeader')%>
+
+
+  <style>
+    .product-text-container {
+      border-radius: 12px;
+      width: 100%;
+      height: 56px;
+      margin-left: 300px;
+      margin-top: 73px;
+      box-shadow: 0px 0px 7px -3px;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    #form {
+      border: 2px;
+      margin-left: 300px;
+      padding-left: 200px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 7px -3px;
+    }
+  </style>
+
+  <!-- Bootstrap form with grid layout -->
+  <form action="/admin//editproduct/<%=productData.id %>" method="POST" id="form" enctype="multipart/form-data">
+
+    <!-- Product Information Card -->
+    <div class="card bg-white mb-4">
+      <div class="card-header">
+        <h2>Product Information</h2>
+        <span class="alert alert-danger text-danger" id="errorContainer"></span>
+
+        <h6>EDIT Product</h6>
+      </div>
+
+      <div class="col-md-6">
+        <label for="productName" class="form-label">Product Name</label>
+        <input type="text" class="form-control" id="productname" value="<%= productData.name %>" name="productname"
+          placeholder="Product name" required>
+        <div id="productNameError" class="error-message"></div>
+      </div>
+      <div class="col-md-6">
+        <label for="productPrice" class="form-label">Price</label>
+        <input type="number" class="form-control" id="price" value="<%=productData.price %>" name="price"
+          placeholder="Price" required >
+        <div id="productPriceError" class="error-message"></div>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <label for="productColor" class="form-label">Colour</label>
+        <input type="text" class="form-control" id="colour" value="<%=productData.colour %>" name="colour"
+          placeholder="Colour">
+      </div>
+      <div class="col-md-6">
+        <label for="brand" class="form-label">Brand</label>
+        <select id="brand" name="brand" class="form-select">
+          <option value="SPECMEN" <%=productData.brand==='SPECMEN' ? 'selected' : '' %>>SPECMEN</option>
+          <option value="H&M" <%=productData.brand==='H&M' ? 'selected' : '' %>>H&M</option>
+          <option value="ZARA" <%=productData.brand==='ZARA' ? 'selected' : '' %>>ZARA</option>
+          <!-- Add your brand options here -->
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-select form-select-input form-select-sm shadow-none" name="category" id="category"
+          aria-label=".form-select-sm example">
+          <% categories.forEach(category=> { %>
+            <option value="<%= category._id %>" <%=(selectedCategory &&
+              selectedCategory._id.toString()===category._id.toString()) ? 'selected' : '' %>>
+              <%= category.categoryname %>
+            </option>
+            <% }) %>
+        </select>
+      </div>
+    </div>
+
+
+    <!-- Variants Card -->
+    <div class="card bg-white mb-4">
+      <div class="card-header">
+        <h2>Variants</h2>
+      </div>
+      <div class="card-body">
+        <div class="row mb-4">
+          <!-- Add Variant Button -->
+          <div class="col-md-12 d-flex justify-content-center">
+            <button type="button" class="btn btn-primary" id="addVariant">Add Variant</button>
+          </div>
+        </div>
+
+        <!-- Size and Quantity Section -->
+        <div id="variantSection">
+          <!-- Variant Template -->
+          <% productData.variant.forEach((variant,index)=> { %>
+            <div class="variant-row row mb-4" data-variant-index="<%=index %>">
+              <div class="col-md-6">
+                <label for="productSize" class="form-label">Size</label>
+                <input type="text" class="form-control" name="variant[size][]" value="<%=variant.size%>"
+                  placeholder="Size">
+              </div>
+              <div class="col-md-6">
+                <label for="productStock" class="form-label">Stock Quantity</label>
+                <input type="number" class="form-control" name="variant[quantity][]" value="<%=variant.quantity %>"
+                  placeholder="Stock" required>
+
+                <div class="variant-error-message error-message"></div>
+              </div>
+
+              <div class="col-md-12 mt-2 d-flex justify-content-end">
+
+                <button type="button" class="btn btn-danger" onclick="removeVariant(this)">&times;</button>
+              </div>
+            </div>
+            <% }) %>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row mt-5" style="margin-left: 10px; width: 600px; ">
+
+      <div class="col-md-6" style="width: 500px;">
+        <div class="card bg-white">
+          <div class="card-header">
+            <h2>Product Highlights</h2>
+            <div class="col-md-12">
+              <label for="Spec1" class="form-label">Highlights 1</label>
+              <input class="form-control" name="Spec1" id="Spec1" value="<%= productData.highlight1 %>">
+            </div>
+            <div class="col-md-12">
+              <label for="Spec2" class="form-label">Highlights 2</label>
+              <input class="form-control" name="Spec2" id="Spec2" value="<%= productData.highlight2 %>">
+            </div>
+            <div class="col-md-12">
+              <label for="Spec3" class="form-label">Highlights 3</label>
+              <input class="form-control" name="Spec3" id="Spec3" value="<%= productData.highlight3 %>">
+            </div>
+            <div class="col-md-12">
+              <label for="Spec4" class="form-label">Highlights 4</label>
+              <input class="form-control" name="Spec4" id="Spec4" value="<%= productData.highlight4 %>">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width: 200px; margin-top: 100px;">update</button>
+
+    <a href="/admin/products" class="btn btn-secondary" style="width: 200px; margin-top: 100px;">Cancel</a>
+
+    <div class="col-md-6" style="margin-left: 500px; width: 400px; margin-top: -480px;">
+      <div class="card bg-white">
+        <div class="card-header">
+          <h2>Product Images</h2>
+          <% for (let i = 0; i < 5; i++) { %>
+          <div class="col-md-6">
+            <label for="productImage<%= i + 1 %>" class="form-label">Image <%= i + 1 %></label>
+            <input type="file" class="form-control" name="image<%= i %>" accept="image/*" id="productImage<%= i + 1 %>">
+    
+            <% if (productData.images[i]) { %>
+            <img src="/productimages/<%= productData.images[i].filename %>" alt="Product Image" class="preview-image"
+              style="height: 100px; width: 100px;">
+            <button class="delete-image" data-index="<%= i %>">Delete</button>
+            <% } %>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    
+
+  </form>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const deleteButtons = document.querySelectorAll('.delete-image');
+  
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          // Get the index of the image to delete
+          const indexToDelete = this.dataset.index;
+  
+          // Get the parent container of the image and button
+          const imageContainer = this.parentNode;
+  
+          // Remove the image element and the delete button
+          imageContainer.querySelector('img').remove();
+          this.remove();
+  
+          // If you need to do something with the index on the client side, you can use it here
+          console.log('Deleted image at index:', indexToDelete);
+        });
+      });
+    });
+  </script>
+
+  <script>
+    function updateImagePreview(inputId, previewId) {
+      const imagePreview = document.getElementById(previewId);
+      const input = document.getElementById(inputId);
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.classList.add('preview-image');
+          img.style.width = '100px';
+          img.style.height = '100px';
+          imagePreview.innerHTML = '';
+          imagePreview.appendChild(img);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        imagePreview.innerHTML = '';
+      }
+    }
+
+    document.getElementById('productImage1').addEventListener('change', function () {
+      updateImagePreview('productImage1', 'imagePreview1');
+    });
+    document.getElementById('productImage2').addEventListener('change', function () {
+      updateImagePreview('productImage2', 'imagePreview2');
+    });
+    document.getElementById('productImage3').addEventListener('change', function () {
+      updateImagePreview('productImage3', 'imagePreview3');
+    });
+    document.getElementById('productImage4').addEventListener('change', function () {
+      updateImagePreview('productImage4', 'imagePreview4');
+    });
+    document.getElementById('productImage5').addEventListener('change', function () {
+      updateImagePreview('productImage5', 'imagePreview5');
+    });
+
+    document.getElementById('addVariant').addEventListener('click', function () {
+      var index = document.querySelectorAll('#variantSection .variant-row').length;
+      var newVariantSection = document.querySelector('#variantSection .variant-row').cloneNode(true);
+
+      newVariantSection.setAttribute('data-variant-index', index);
+
+      newVariantSection.querySelector('button').removeAttribute('disabled');
+
+      document.getElementById('variantSection').appendChild(newVariantSection);
+    });
+
+    function removeVariant(button) {
+      var variantSection = document.getElementById('variantSection');
+
+
+      if (variantSection.querySelectorAll('.variant-row').length > 1) {
+
+        button.closest('.variant-row').remove();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('form');
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const productName = document.getElementById('productname').value.trim().toLowerCase();
+        if (productName === '' || productName.includes('black')) {
+          displayValidationMessage('Please enter a valid product name.');
+          return;
+        }
+
+        const colour = document.getElementById('colour').value.trim();
+        if (colour === '' || /\d/.test(colour)) {
+          displayValidationMessage('Please enter a valid colour (text only, no numbers).');
+          return;
+        }
+
+        const price = document.getElementById('price').value.trim();
+        if (price === '' || isNaN(price) || parseFloat(price) < 0) {
+          displayValidationMessage('Please enter a valid price (at least 0).');
+          return;
+        }
+
+        const variants = document.querySelectorAll('#variantSection .variant-row');
+        if (variants.length === 0) {
+          displayValidationMessage('Please add at least one variant.');
+          return;
+        }
+
+        for (const variant of variants) {
+          const size = variant.querySelector('input[name="variant[size][]"]').value.trim();
+          if (size === '') {
+            displayValidationMessage('Please enter a valid size for all variants.');
+            return;
+          }
+
+          const quantity = variant.querySelector('input[name="variant[quantity][]"]').value.trim();
+          if (quantity === '' || isNaN(quantity) || parseInt(quantity) < 0) {
+            displayValidationMessage('Please enter a valid quantity for all variants (at least 0).');
+            return;
+          }
+        }
+
+        form.submit();
+      });
+
+      function displayValidationMessage(message) {
+        const errorContainer = document.getElementById('errorContainer');
+
+        errorContainer.innerHTML = '';
+
+        const errorMessage = document.createElement('span');
+        errorMessage.classList.add('error-message');
+        errorMessage.textContent = message;
+
+        errorContainer.appendChild(errorMessage);
+
+      }
+    });
+  </script>
+
+  <%- include('../partials/adminFooter')%>
+
+    <!-- <script>
+        document.getElementById('addVariant').addEventListener('click', function () {
+          var index = document.querySelectorAll('#variantSection .variant-row').length;
+          var newVariantSection = document.querySelector('#variantSection .variant-row').cloneNode(true);
+  
+          newVariantSection.setAttribute('data-variant-index', index);
+  
+          newVariantSection.querySelector('button').removeAttribute('disabled');
+  
+          newVariantSection.querySelectorAll('input').forEach(input => {
+            input.value = '';
+          });
+  
+          document.getElementById('variantSection').appendChild(newVariantSection);
+        });
+  
+        function removeVariant(button) {
+          var variantSection = document.getElementById('variantSection');
+  
+          if (variantSection.querySelectorAll('.variant-row').length > 1) {
+            // Remove the parent row of the clicked button
+            button.closest('.variant-row').remove();
+          }
+        }
+
+
+
+        function validateForm() {
+    // Reset previous error messages
+    document.querySelectorAll('.error-message').forEach(element => {
+      element.textContent = '';
+    });
+
+    // Validate Product Name
+    const productName = document.getElementById('productName').value;
+    if (productName.trim() === '') {
+      document.getElementById('productNameError').textContent = 'Product name cannot be blank';
+      return false;
+    }
+
+    // Validate Price
+    const productPrice = document.getElementById('productPrice').value;
+    if (parseFloat(productPrice) <= 0 || isNaN(productPrice)) {
+      document.getElementById('productPriceError').textContent = 'Price must be greater than 0';
+      return false;
+    }
+
+    // Validate Variants (Size and Quantity)
+    const variantRows = document.querySelectorAll('.variant-row');
+    for (let i = 0; i < variantRows.length; i++) {
+      const size = variantRows[i].querySelector('[name="variant[size][]"]').value;
+      const quantity = variantRows[i].querySelector('[name="variant[quantity][]"]').value;
+
+      if (size.trim() === '' || isNaN(quantity) || parseInt(quantity) < 1) {
+        variantRows[i].querySelector('.variant-error-message').textContent = 'Invalid size or quantity';
+        return false;
+      }
+    }
+
+    // Additional validation for other fields if needed
+
+    return true; // Form is valid
+  }
+      </script> -->

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Title</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Include SweetAlert CSS and JS from CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
+<script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script src="path/to/jquery.min.js"></script>
+<script src="path/to/sweetalert.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+  <style>
+    /* Change background color of navigation bar */
+    .navbar {
+      background-color: #EFEFEF;
+      box-shadow: none !important; /* Remove shadow */
+    }
+
+    /* Add black line at the bottom of the navbar */
+    .navbar::before {
+      content: '';
+      display: block;
+      height: 1px;
+      width: calc(100% - 90px); /* 45px from left and 45px from right */
+      background-color: #000;
+      position: absolute;
+      bottom: 0;
+      left: 45px;
+    }
+
+    /* Remove hovering effect on navbar items */
+    .navbar-nav .nav-item:hover {
+      background-color: transparent !important;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-white sticky-top navbar-light p-3 position-relative">
+    <div class="container">
+      <a class="navbar-brand" href="#"
+        style="font-family: 'lalezar', sans-serif; font-weight:bold; font-size: 24px; color: #000000;">SPECMEN</a>
+        <form class="form-inline my-2 my-lg-0 ms-auto d-lg-none mx-2" id="searchForm" method="post" action="/user/search">
+          <div class="input-group">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="query">
+            <button class="btn btn-outline-dark" type="submit" onclick="searchProducts()">
+              <i class="fa-solid fa-search"></i>
+            </button>
+          </div>
+        </form>
+        <div class="nav-item dropdown d-lg-none">
+          <a class="nav-link mx-2 text-uppercase dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fa-solid fa-circle-user me-1" style="color: #000000;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/user/profile">Profile</a>
+            <a class="dropdown-item" href="#"></a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/user/logout">Logout</a>
+          </div>
+        </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <!-- New Search Bar Form -->
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link mx-2 text-uppercase" href="/user/user-home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2 text-uppercase" aria-current="page" href="/user/shop">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2 text-uppercase" href="#">about</a>
+          </li>
+         
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0 ms-auto d-md-none d-sm-none d-lg-block" id="searchForm" method="post" action="/user/search">
+          <div class="input-group">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" name="query">
+            <button class="btn btn-outline-dark" type="submit" onclick="searchProducts()">
+              <i class="fa-solid fa-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <div class="navbar-nav ms-auto">
+          <div class="nav-item dropdown d-md-none d-sm-none d-lg-block">
+            <a class="nav-link mx-2 text-uppercase dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <i class="fa-solid fa-circle-user me-1" style="color: #000000;"></i>
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#"></a>
+              <a class="dropdown-item" href="/user/profile">Profile</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/user/logout">Logout</a>
+            </div>
+          </div>
+          <li class="nav-item">
+            <a class="nav-link mx-2 text-uppercase" href="/user/user-cart"><i class="fa-solid fa-cart-shopping"
+                style="color: #000000;"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2 text-uppercase" href="/user/wallet-get"><i class="fa-solid fa-wallet me-1"
+                style="color: #000000;"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2 text-uppercase" href="/user/wish-list"><i class="fa-solid fa-heart me-1"
+                style="color: #000000;"></i></a>
+          </li>
+        </div>
+      </div>
+      
+    </div>
+  </nav>
+
+
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchForm = document.getElementById('searchForm');
+  
+      searchForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+  
+        const searchInput = document.getElementById('search');
+        const searchTerm = searchInput.value.trim();
+        console.log(searchTerm, 'searchitem');
+  
+        if (searchTerm !== '') {
+          fetch('/user/search', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `query=${encodeURIComponent(searchTerm)}`,
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+        }
+      });
+    });
+  </script>
+  
+  
+  

@@ -1,0 +1,266 @@
+<%- include('../partials/adminHeader')%>
+
+<div class="d-flex justify-content-end" style="margin-top: 100px; margin-right: 50px;">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCouponModal">
+        Add Coupon <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+    </button>
+</div>
+
+<!-- Add Coupon Modal -->
+<div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCouponModalLabel">Add Coupon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCouponForm" method="post"  action="/admin/add-coupon">
+                    <div class="form-group">
+                        <label for="couponName">Coupon Name</label>
+                        <input type="text" class="form-control" id="couponName" name="couponName" required>
+                        <small class="text-danger" id="couponNameError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="couponCode">Coupon Code</label>
+                        <input type="text" class="form-control" id="couponCode" name="couponCode" required>
+                        <small class="text-danger" id="couponCodeError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discount">Discount</label>
+                        <input type="number" class="form-control" id="discount" name="discount" required>
+                        <small class="text-danger" id="discountError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" class="form-control" id="startDate" name="startDate" required>
+                        <small class="text-danger" id="startDateError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endDate">End Date</label>
+                        <input type="date" class="form-control" id="endDate" name="endDate" required>
+                        <small class="text-danger" id="endDateError"></small>
+                    </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="submitCouponBtn">Add Coupon</button>
+
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <% Newcoupon.forEach((data) => { %>
+            <div class="col-md-6" style="width: 20rem;">
+                <div class="card" style="width: 18rem; margin-top: 20px; margin-right: 10px; margin-bottom: 20px; margin-left: 200px">
+                    <div class="card-body">
+                        <h6 class="card-title"><span style="color: rgb(212, 88, 88);">NAME :</span><span style="font-weight: bold;"><%= data.couponName %></span></h6>
+                        <p class="card-text"><span style="color: rgb(77, 255, 0);">CODE :</span> <span style="font-weight: bold;"><%= data.couponCode %></span></p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <span>START DATE : </span>
+                            <span style="font-weight: bold;">
+                                <% let dt = new Date(data.startDate); %>
+                                <%= dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear() %>
+                            </span>
+                        </li>
+                        <li class="list-group-item">
+                            <span>END DATE : </span>
+                            <span style="font-weight: bold;">
+                                <% let endDate = new Date(data.endDate); %>
+                                <%= endDate.getDate() + '/' + (endDate.getMonth() + 1) + '/' + endDate.getFullYear() %>
+                            </span>
+                        </li>
+                        <li class="list-group-item">DISCOUNT : <span style="font-weight: bold; font-size: larger;"><%= data?.discount %> %</span> </li>
+                        <li class="list-group-item">
+                            delete
+                            <span style="margin-left: 100px;">
+                                <form action="/admin/delete-coupon/<%= data._id %>" method="post" style="display: inline;">
+                                    <button class="delete-btn" style="border: none; background-color: transparent;">
+                                        <i class="fa-solid fa-trash" style="color: #000000;"></i>
+                                    </button>
+                                </form>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous" defer></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+    crossorigin="anonymous" defer></script>
+    
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            var successMessage = "<%= success[0] %>";
+            var errorMessage = "<%= error[0] %>";
+            
+            // Show SweetAlert on successful delete
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Coupon !',
+                    text: successMessage,
+                });
+            }
+        
+            // Show SweetAlert on error
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage,
+                });
+            }
+        
+            // Handle delete button click
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    
+                    // Display confirmation prompt
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You won\'t be able to revert this!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // If confirmed, submit the form
+                            this.closest('form').submit();
+                        }
+                    });
+                });
+            });
+        });
+        
+    document.getElementById('submitCouponBtn').addEventListener('click', function () {
+        fetch('/admin/add-coupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    couponName: document.getElementById('couponName').value,
+                    couponCode: document.getElementById('couponCode').value,
+                    discount: document.getElementById('discount').value,
+                    startDate: document.getElementById('startDate').value,
+                    endDate: document.getElementById('endDate').value,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    if (data.success) {
+                        addCouponModal.hide();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+    var addCouponModal = new bootstrap.Modal(document.getElementById('addCouponModal'));
+    var successMessage = "<%= success[0] %>";
+    var errorMessage = "<%= error[0] %>";
+
+    document.getElementById('addCouponForm').addEventListener('submit', function (event) {
+        var couponName = document.getElementById('couponName').value.trim();
+        var couponCode = document.getElementById('couponCode').value.trim();
+        var discount = parseFloat(document.getElementById('discount').value);
+        var startDate = new Date(document.getElementById('startDate').value);
+        var endDate = new Date(document.getElementById('endDate').value);
+
+        var currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+
+        if (startDate < currentDate) {
+            document.getElementById('startDateError').innerText = 'Start Date cannot be less than the current date';
+            setTimeout(function () {
+                document.getElementById('startDateError').innerText = '';
+            }, 4000);
+            event.preventDefault();
+        }
+
+        if (endDate < currentDate) {
+            document.getElementById('endDateError').innerText = 'End Date cannot be less than the current date';
+            setTimeout(function () {
+                document.getElementById('endDateError').innerText = '';
+            }, 4000);
+            event.preventDefault();
+        }
+
+        if (endDate < startDate) {
+            document.getElementById('endDateError').innerText = 'End Date cannot be less than Start Date';
+            setTimeout(function () {
+                document.getElementById('endDateError').innerText = '';
+            }, 4000);
+            event.preventDefault();
+        }
+
+        if (couponName === '' || /^\s+$/.test(couponName)) {
+            document.getElementById('couponNameError').innerText = 'Coupon Name cannot be empty or contain only spaces';
+            setTimeout(function () {
+                document.getElementById('couponNameError').innerText = '';
+            }, 4000);
+            event.preventDefault();
+        }
+
+        if (couponCode === '' || /^\s+$/.test(couponCode)) {
+            document.getElementById('couponCodeError').innerText = 'Coupon Code cannot be empty or contain only spaces';
+            setTimeout(function () {
+                document.getElementById('couponCodeError').innerText = '';
+            }, 4000);
+            event.preventDefault();
+        }
+
+        if (discount < 1 || discount > 90) {
+            document.getElementById('discountError').innerText = 'Discount must be between 1 and 90';
+            setTimeout(function () {
+                document.getElementById('discountError').innerText = '';
+            }, 4000);
+            event.preventDefault();
+        }
+    });
+
+    document.getElementById('addCouponBtn').addEventListener('click', function () {
+        addCouponModal.show();
+    });
+});
+
+</script>
+
+
+
+
+
+<%- include('../partials/adminFooter')%>

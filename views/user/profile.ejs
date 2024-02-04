@@ -1,0 +1,374 @@
+<%- include('../partials/usernav')%>
+
+    <style>
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid transparent;
+            border-radius: .25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+        }
+
+        .me-2 {
+            margin-right: .5rem !important;
+        }
+
+        footer {
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        section {
+            padding: 0;
+            margin: 0;
+        }
+
+        .btn-custom {
+            background-color: white;
+            border: 1px solid black;
+            color: black;
+            /* Adjust text color as needed */
+            margin-top: 35px;
+            /* Add margin for spacing */
+            width: 300px;
+        }
+    </style>
+
+
+
+    <div class="container" style="margin-top: 40px;">
+        <div class="main-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+
+                                <label for="profileImage">
+                                    <img src='/productimages/<%=userData.profilePhoto%>' id="userprofileIMG" alt="Admin"
+                                        class="rounded-circle p-1 bg-primary" width="110"
+                                        style="height: 150px; width: 150px;">
+                                </label>
+                                <div class="mt-3">
+                                    <button type="button" class="btn " data-bs-toggle="modal"
+                                        data-bs-target="#profileModal">
+                                        <i class="fa-solid fa-camera"></i>
+                                    </button>
+                                    <h4>
+                                        <%=userData.username%>
+                                    </h4>
+                                    <p class="text-secondary mb-1">
+                                        <%=userData.email%>
+                                    </p>
+
+                                </div>
+                            </div>
+
+                            <ul style=" list-style-type: none;">
+                                <a href="/user/order-history">
+                                    <li><button type="button" class="btn btn-custom"><i class="fas fa-list"></i>
+                                            Order</button></li>
+                                </a>
+                                <a href="/user/adress">
+                                    <li><button type="button" class="btn btn-custom"><i
+                                                class="fas fa-map-marker-alt"></i> Address Management</button></li>
+                                </a>
+                                <li><button type="button" class="btn btn-custom"><i class="fas fa-shopping-cart"></i>
+                                        Cart</button></li>
+                                <a href="/user/coupon-show">
+                                    <li><button type="button" class="btn btn-custom"><i class="fa-solid fa-sack-xmark"
+                                                style="color: #000000;"></i>
+                                            Coupons</button></li>
+                                </a>
+                                <a href="/user/wallet-get">
+                                    <li><button type="button" class="btn btn-custom"><i class="fa-solid fa-wallet"
+                                                style="color: #000000;"></i></i>
+                                            Wallet</button></li>
+                                </a>
+
+                                <li><button type="button" class="btn btn-custom"><i class="fas fa-lock"></i> Change
+                                        Password</button></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Full Name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary d-flex align-items-center">
+                                    <p class="mb-0">
+                                        <%= userData.username %>
+                                    </p>
+                                    <button type="button" class="btn  ms-5" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
+                                        <i class="fas fa-edit" style="color: black;"></i>
+                                    </button>
+
+
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+
+                                    <p>
+                                        <%=userData.email%>
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Phone</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <p>
+                                        <% if (userData.address && userData.address.length> 0 &&
+                                            userData.address[0].mobile) { %>
+                                            <%= userData.address[0].mobile %>
+                                                <% } else { %>
+                                                    No phone number available
+                                                    <% } %>
+                                    </p>
+                                    <hr>
+
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Referral Link</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <p>
+                                        <span id="referralLink">http://localhost:3000/user/signup?ref=<%= userData._id
+                                                %></span>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            onclick="copyReferralLink()">Copy</button>
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Change User Name</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form id="changeUsernameForm">
+                                            <div class="mb-3">
+                                                <label for="newUserName" class="form-label">New User Name:</label>
+                                                <input type="text" class="form-control" id="newUserName"
+                                                    name="newUserName">
+                                            </div>
+                                            <div id="errorMessage" class="text-danger" style="display: none;"></div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="changeUserName()">Save
+                                    changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- // <<--------------------------------------------------------------------------------------------------------------------------->
+
+                <input type="file" class="form-control" name="profileImage" id="profileImage" accept="image/*"
+                    onchange="changeProfileImage()" hidden>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!-- // <<--------------------------------------------------------------------------------------------------------------------------->
+                <!-- scriptfor profileimage -->
+
+
+                <script>
+                    function previewImage() {
+                        var input = document.getElementById('profileImage');
+                        var preview = document.getElementById('userprofileIMG');
+
+                        preview.src = input.files[0];
+
+                    }
+
+                    function changeProfileImage() {
+                        var input = document.getElementById('profileImage');
+                        var file = input.files[0];
+                        console.log(file, '--------------------');
+                        if (!file) {
+
+                            alert('Please select an image.');
+                            return;
+                        }
+
+                        var formData = new FormData();
+                        console.log(file);
+                        formData.append('profileImage', file);
+                        console.log(formData);
+                        fetch('/addprofilepic', {
+                            method: 'POST',
+                            body: formData,
+                        })
+                            .then(response => response.json())
+                            .then(response => {
+                                if (response.success) {
+
+                                    $('#profileModal').modal('hide');
+                                    location.reload();
+                                } else {
+
+                                    alert('Error updating profile image.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+
+                                alert('An unexpected error occurred.');
+                            });
+                    }
+
+
+                </script>
+
+
+
+                <!-- // <<------------------------------------------------------------------------------------------------------------------------------>
+
+
+                <script>
+                    function copyReferralLink() {
+                        var referralLink = document.getElementById('referralLink');
+                        var textArea = document.createElement("textarea");
+                        textArea.value = referralLink.textContent;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        alert('Referral link copied to clipboard!');
+                    }
+                </script>
+
+
+
+
+
+                <script>
+                    function changeUserName() {
+
+
+
+                        var newUserNameInput = $('#newUserName');
+                        var errorMessage = $('#errorMessage');
+
+                        errorMessage.hide();
+
+                        var newUserNameValue = newUserNameInput.val().trim();
+
+                        if (newUserNameValue === "") {
+                            displayErrorMessage("New username cannot be empty.");
+                            return;
+                        }
+
+
+
+
+
+
+
+                        var formData = $('#changeUsernameForm').serializeArray();
+                        var jsonData = {};
+                        console.log(formData);
+                        formData.forEach(function (field) {
+                            jsonData[field.name] = field.value;
+                        });
+
+                        fetch('/user/editname', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(jsonData),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+
+                                    $('#userName').text(jsonData.newUserName);
+                                    $('#exampleModal').modal('hide');
+                                    location.reload()
+                                } else {
+                                    console.error('Failed to update username');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error during the Fetch request:', error);
+                            });
+                    }
+
+                    
+    function displayErrorMessage(message) {
+        var errorMessage = $('#errorMessage');
+        errorMessage.text(message);
+        errorMessage.show();
+        setTimeout(function () {
+            errorMessage.hide();
+        }, 2000);
+
+    }
+                </script>
+
+
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+
+
+
+
+
+
+                <%- include('../partials/userlogfoter')%>

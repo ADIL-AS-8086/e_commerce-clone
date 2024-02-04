@@ -1,0 +1,343 @@
+<%- include('../partials/usernav')%>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .image-banner-container {
+            position: relative;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .image-banner {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .card-container {
+            width: 18rem;
+            height: 20.25rem;
+            background-color: #F1F2F7;
+            position: relative;
+            border: 0;
+            border-radius: 0;
+            overflow: hidden;
+
+        }
+
+        .icon-heart,
+        .icon-cart {
+            position: absolute;
+            font-size: 24px;
+            color: #000;
+            z-index: 1;
+        }
+
+        .icon-heart {
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+        }
+
+        .icon-cart {
+            bottom: 10px;
+            left: 10px;
+            font-size: 12px;
+        }
+
+        .additional-info {
+            background-color: #fff;
+            padding: 1rem;
+            margin-top: 1px;
+            width: calc(100% - 20px);
+            margin-left: 10px;
+            z-index: 0;
+            position: relative;
+        }
+
+        .additional-info p {
+            font-size: 11.5px;
+            font-weight: 300;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            margin: 0;
+            margin-top: 5px;
+        }
+
+        .custom-card-container {
+            width: 12rem;
+            height: 16.25rem;
+            background-color: #ffffff;
+            /* Updated to pure white */
+            position: relative;
+            border: 0;
+            border-radius: 0;
+            overflow: hidden;
+            filter: blur(10px 30px) blur(42px);
+            transition: transform 0.3s;
+        }
+
+        .custom-card-container:hover {
+            transform: scale(1.05);
+            box-shadow: 10px 30px 42px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-icon-heart,
+        .custom-icon-cart {
+            position: absolute;
+            font-size: 24px;
+            color: #000000;
+
+        }
+
+        .custom-icon-heart {
+            bottom: 10px;
+            right: 10px;
+            font-size: 10px;
+        }
+
+        .custom-icon-cart {
+            bottom: 10px;
+            left: 10px;
+            font-size: 12px;
+        }
+
+        .custom-additional-info {
+            background-color: #fff;
+            padding: 1rem;
+            margin-top: 1px;
+            width: 12rem;
+            margin-left: 10px;
+        }
+
+        .custom-additional-info p {
+            font-size: 11.5px;
+            font-weight: 300;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            margin: 0;
+            margin-left: 0;
+            margin-top: 0;
+        }
+
+
+        .custom-p {
+            margin-left: 25px;
+        }
+
+        .text-uppercase a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .text-uppercase a:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+        .text-white a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .text-white a:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+        .view-all-button-container {
+            text-align: center;
+        }
+
+        .view-all-button {
+            background-color: white;
+            border: 1px solid black;
+            color: black;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Arrow Icon Styles */
+        .view-all-button i {
+            margin-left: 5px;
+
+        }
+    </style>
+
+
+
+    <!-- Image Banner -->
+    <div class="image-banner-container">
+        <img class="image-banner img-fluid" src="/assets/Landing page.png" alt="Banner Image">
+    </div>
+    <div class="container-fluid mt-4">
+        <h2 class="text-center">Best Selling</h2>
+        <p class="text-center">Get in on the trend with our curated selection of best-selling styles.</p>
+    </div>
+    <!-- Card Section -->
+    <div class="row " style="margin-left: 6rem;">
+        <!-- Card 1 -->
+        <div class="col-md-4">
+            <div class="card-container  d-flex justify-content-center align-items-center">
+                <i class="fa-regular fa-heart icon-heart"></i>
+                <i class="fas fa-cart-plus icon-cart"></i>
+                <img class="card-img-top"
+                    src="https://static.zara.net/photos///2023/I/0/2/p/5585/311/400/2/w/315/5585311400_6_1_1.jpg?ts=1692696040462"
+                    alt="Card image cap">
+
+            </div>
+            <div class="additional-info">
+                <p>Regular Fit Long Sleeve Top</p>
+                <p id="p">₹ 3400 </p>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4">
+            <div class="card-container   d-flex justify-content-center align-items-center">
+                <i class="fa-regular fa-heart icon-heart"></i>
+                <i class="fas fa-cart-plus icon-cart"></i>
+                <img class="card-img-top"
+                    src="https://static.zara.net/photos///2023/I/0/2/p/0048/315/800/2/w/315/0048315800_6_1_1.jpg?ts=1697638465985"
+                    alt="Card image cap">
+
+            </div>
+            <div class="additional-info">
+                <p>Regular Fit Long Sleeve Top</p>
+                <p id="p">₹ 3400 </p>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4">
+            <div class="card-container  d-flex justify-content-center align-items-center">
+                <i class="fa-regular fa-heart icon-heart"></i>
+                <i class="fas fa-cart-plus icon-cart"></i>
+                <img class="card-img-top"
+                    src="https://static.zara.net/photos///2023/I/0/2/p/2688/320/064/2/w/315/2688320064_6_1_1.jpg?ts=1697638465799"
+                    alt="Card image cap">
+
+            </div>
+            <div class="additional-info">
+                <p>Regular Fit Long Sleeve Top</p>
+                <p id="p">₹ 3400 </i></p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container mt-4">
+            <h2 class="text-center">Our Products</h2>
+        </div>
+
+        <div class="row">
+            <% proctData.forEach((data)=> { %>
+                <% if (data.Status==true) { %>
+                    <div class="col-md-3">
+                        <div class="custom-card-container ms-5 mt-5">
+                            <a href="#" class="custom-icon-heart"><i class="fa-regular fa-heart"></i></a>
+                            <a href="#" class="custom-icon-cart"><i class="fas fa-cart-plus"></i></a>
+                            <a href="/user/product-view/<%= data._id %>">
+                                <img class="card-img-top" src="/productimages/<%= data.images[0].filename %>"
+                                    alt="Card image cap">
+                            </a>
+                        </div>
+                        <div class="custom-additional-info ms-5">
+                            <p>
+                                <%= data.name %>
+                            </p>
+                            <% if (data.offer && data.offer.discountPercentage> 0) { %>
+                                <div class="offer-container">
+                                    <p class="custom-p"
+                                        style="font-weight: bolder; display: inline-block; background-color: yellow; color: black;">
+                                        ₹ <%= data.Discountedprice %>
+                                    </p>
+                                    <p class="custom-p"
+                                        style="font-weight: bolder; display: inline-block; background-color: yellow; color: black;">
+                                        <%= data.offer.discountPercentage %>% Off
+                                    </p>
+                                    <p class="original-price"
+                                        style="text-decoration: line-through; color: black; display: inline-block; margin-left: 5px;">
+                                        ₹ <%= data.price %>
+                                    </p>
+                                </div>
+                                <% } else { %>
+                                    <p class="custom-p" style="margin-left: 40px; font-weight: bolder;">₹ <%= data.price
+                                            %>
+                                    </p>
+                                    <% } %>
+                        </div>
+                    </div>
+                    <% } %>
+                        <% }) %>
+        </div>
+        <div class="col-md-12 d-flex justify-content-center mt-5">
+            <div class="view-all-button-container">
+                <a href="/user/shop"> <button class="view-all-button">
+                        View All
+                        <i class="fas fa-arrow-right"></i>
+                    </button></a>
+            </div>
+        </div>
+        <!-- Card 2 -->
+
+
+
+
+        <div class="col-md-12 mt-4">
+            <h2 class="text-center">Category</h2>
+            <p class="text-center">Select the Category you need</p>
+        </div>
+        <div class="row ms-5">
+            <div class="d-flex flex-wrap justify-content-center align-items-center">
+                <% category.forEach((product, index) => { %>
+                    <div class="col-md-4 mb-4">
+                        <div class="custom-category-box text-center"
+                            style="background-color: #F1F2F7; height: 16rem; width: 16rem; margin: 0 20px 20px 0;">
+                            <img class="img-fluid" src="/uploadedImages/<%= product.image %>"
+                                alt="Category <%= index + 1 %>">
+                            <!-- Use <a> tag as a hyperlink -->
+                            <a href="/user/catogery-wise-page/<%= product._id %>" class="btn btn-light border-dark rounded-0 mt-4"
+                                style="padding: 10px 20px;">
+                                <%= product.categoryname %> <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <% if ((index + 1) % 3 === 0 && (index + 1) !== category.length) { %>
+            </div>
+            <div class="d-flex flex-wrap justify-content-center align-items-center" style="margin-top: 180px;">
+                <% } %>
+                <% }); %>
+            </div>
+        </div>
+        
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.category-button').click(function () {
+                    console.log($(this).data('categoryid'));
+                    const categoryId = $(this).data('categoryid');
+                    console.log(categoryId );
+                    $.ajax({
+                        type: 'GET',
+                        url: `/user/catogery-wise-page/${categoryId}`,
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+
+                            data.products.forEach(product => {
+                                console.log(product.name);
+                                // Handle your product data here
+                            });
+                        },
+                        error: function (error) {
+                            console.error('Error fetching products:', error);
+                        }
+                    });
+                });
+            });
+        </script>
+
+
+        <%- include('../partials/userlogfoter')%>

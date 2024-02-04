@@ -1,0 +1,529 @@
+<%- include('../partials/adminHeader') %>
+
+<style>
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    background-color: #f8f9fa;
+  }
+
+  .fixed-image-preview {
+    margin-top: 20px;
+  }
+
+  .preview-image {
+    max-width: 100%;
+    max-height: 200px;
+  }
+  .alert {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 0.25rem;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<div class="details" style="margin-left: 200px;">
+  <div class="recentOrders">
+    <div class="container mt-5">
+      <!-- Card for Product Details -->
+      <div class="card bg-white">
+        <div class="card-header">
+          <form class="row g-3" method="POST" action="/admin/addproduct" enctype="multipart/form-data">
+            <h2>Add Products</h2>
+            <span class="alert alert-danger text-danger" id="errorContainer"></span>
+            <!-- Product Details Fields -->
+            <div class="col-md-6">
+              <label for="productname" class="form-label">Product Name</label>
+              <input class="form-control" name="productname" id="productname" required>
+            </div>
+            <div class="col-md-6">
+              <label for="colour" class="form-label">Colour</label>
+              <input class="form-control" name="colour" id="colour" required>
+            </div>
+            <div class="col-md-6">
+              <label for="brand" class="form-label">Brand</label>
+              <select id="brand" name="brand" class="form-select">
+                <option>SPECMEN</option>
+                <option>H&M</option>
+                <option>ZARA</option>
+                <!-- Add your brand options here -->
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="price" class="form-label">Price</label>
+              <input type="number" class="form-control" name="price" id="price" required>
+            </div>
+
+
+              <!-- Inside the form -->
+<div class="col-md-6">
+  <label for="category" class="form-label">Category</label>
+  <select id="category" name="category" class="form-select" required>
+    <% categories.forEach(category => { %>
+      <option value="<%= category._id %>"><%= category?.categoryname %></option>
+    <% }); %>
+  </select>
+</div>
+
+
+
+            <!-- Size and Quantity Section -->
+            <div class="row mb-4">
+              <!-- Add Variant Button -->
+              <div class="col-md-12 d-flex justify-content-center">
+                <button type="button" class="btn btn-primary" id="addVariant">Add Variant</button>
+              </div>
+            </div>
+
+            <!-- Size and Color Section -->
+            <div id="variantSection">
+              <!-- Variant Template -->
+              <div class="variant-row row mb-4" data-variant-index="0">
+                <div class="col-md-6">
+                  <label for="productSize" class="form-label">Size</label>
+                  <input type="text" class="form-control" name="variant[size][]" placeholder="Size">
+                </div>
+                <div class="col-md-6">
+                  <label for="productStock" class="form-label">Stock Quantity</label>
+                  <input type="number" class="form-control" name="variant[quantity][]" placeholder="Stock" required>
+                </div>
+                <!-- Remove Variant Icon -->
+                <div class="col-md-12 mt-2 d-flex justify-content-end">
+                  <!-- Ensure at least one variant is always present -->
+                  <button type="button" class="btn btn-danger" onclick="removeVariant(this)" disabled>&times;</button>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- <div class="row mt-5">
+              <div class="col-md-6">
+                <div class="card bg-white">
+                  <div class="card-header">
+                    <h2>Product Offer</h2>
+                    <div class="col-md-12">
+                      <label for="discountPercentage" class="form-label">Discount Percentage</label>
+                      <input type="number" class="form-control" name="discountPercentage" id="discountPercentage" min="0" max="100">
+                    </div>
+                    <div class="col-md-12">
+                      <label for="startDate" class="form-label">Start Date</label>
+                      <input type="date" class="form-control" name="startDate" id="startDate">
+                    </div>
+                    <div class="col-md-12">
+                      <label for="endDate" class="form-label">End Date</label>
+                      <input type="date" class="form-control" name="endDate" id="endDate">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+
+            <!-- Image Upload Section -->
+            <div class="row mt-5">
+              <!-- Card for Highlights -->
+              <div class="col-md-6">
+                <div class="card bg-white">
+                  <div class="card-header">
+                    <h2>Product Highlights</h2>
+                    <div class="col-md-12">
+                      <label for="inputSpec1" class="form-label">Highlights 1</label>
+                      <input class="form-control" name="Spec1" id="spec1">
+                    </div>
+                    <div class="col-md-12">
+                      <label for="inputSpec2" class="form-label">Highlights 2</label>
+                      <input class="form-control" name="Spec2" id="spec2">
+                    </div>
+                    <div class="col-md-12">
+                      <label for="inputSpec3" class="form-label">Highlights 3</label>
+                      <input class="form-control" name="Spec3" id="spec3">
+                    </div>
+                    <div class="col-md-12">
+                      <label for="inputSpec4" class="form-label">Highlights 4</label>
+                      <input class="form-control" name="Spec4" id="spec4">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card for Image Upload -->
+              <div class="col-md-6">
+                <div class="card bg-white">
+                  <div class="card-header">
+                    <h2>Product Images</h2>
+
+                    <!-- Image 1 -->
+                    <div class="col-md-6">
+                      <label for="productImage1" class="form-label">Image 1</label>
+                      <input type="file" class="form-control" name="productImages" accept="image/*" id="productImage1" onchange="updateImagePreview('productImage1', 'imagePreview1')" required>
+                      <!-- Image Preview -->
+                      <div id="imagePreview1" style="width: 100px; height: 100px;"></div>
+                      <button type="button" class="btn btn-danger delete-button" onclick="removeImage('productImage1', 'imagePreview1')">&times; Remove</button>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="productImage2" class="form-label">Image 2</label>
+                      <input type="file" class="form-control" name="image1" accept="image/*" id="productImage2" onchange="updateImagePreview('productImage2', 'imagePreview2')" required>
+                      <!-- Image Preview -->
+                      <div id="imagePreview2" style="width: 100px; height: 100px;"></div>
+                      <button type="button" class="btn btn-danger delete-button" onclick="removeImage('productImage2', 'imagePreview2')">&times; Remove</button>
+                    </div>
+
+                    <!-- Image 3 -->
+                    <div class="col-md-6">
+                      <label for="productImage3" class="form-label">Image 3</label>
+                      <input type="file" class="form-control" name="image2" accept="image/*" id="productImage3" onchange="updateImagePreview('productImage3', 'imagePreview3')" required>
+                      <!-- Image Preview -->
+                      <div id="imagePreview3" style="width: 100px; height: 100px;"></div>
+                      <button type="button" class="btn btn-danger delete-button" onclick="removeImage('productImage3', 'imagePreview3')">&times; Remove</button>
+                    </div>
+
+                    <!-- Image 4 -->
+                    <div class="col-md-6">
+                      <label for="productImage4" class="form-label">Image 4</label>
+                      <input type="file" class="form-control" name="image3" accept="image/*" id="productImage4" onchange="updateImagePreview('productImage4', 'imagePreview4')">
+                      
+
+
+                      <div id="imagePreview4" style="width: 100px; height: 100px;"></div>
+                      <button type="button" class="btn btn-danger delete-button" onclick="removeImage('productImage4', 'imagePreview4')">&times; Remove</button>
+                    </div>
+
+                    <!-- Image 5 -->
+                    <div class="col-md-6">
+                      <label for="productImage5" class="form-label">Image 5</label>
+                      <input type="file" class="form-control" name="image4" accept="image/*" id="productImage5" onchange="updateImagePreview('productImage5', 'imagePreview5')">
+                      <!-- Image Preview -->
+                      <div id="imagePreview5" style="width: 100px; height: 100px;"></div>
+                      <button type="button" class="btn btn-danger delete-button" onclick="removeImage('productImage5', 'imagePreview5')">&times; Remove</button>
+                    </div>
+                    <div class="d-flex justify-content-around mt-3">
+                      <div class="cardHeader d-flex">
+                        <button type="submit" class="btn btn-dark">Add Product</button>
+                      </div>
+                      <div class="cardHeader d-flex">
+                        <a href="/admin/products" class="btn btn-secondary">Cancel</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          
+
+            <!-- Fixed Image Preview -->
+            <div class="fixed-image-preview mt-5">
+              <div id="imagePreview1" style="width: 100px; height: 100px;"></div>
+              <br>
+              <br>
+              <div id="imagePreview2" style="width: 100px; height: 100px;"></div>
+              <br>
+              <br>
+              <div id="imagePreview3" style="width: 100px; height: 100px;"></div>
+              <br>
+              <br>
+              <div id="imagePreview4" style="width: 100px; height: 100px;"></div>
+              <br>
+              <br>
+              <div id="imagePreview5" style="width: 100px; height: 100px;"></div>
+              <br>
+              <br>
+
+
+
+
+
+            
+            </div>
+
+            <!-- Submit and Cancel Buttons -->
+           
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function removeImage(inputId, previewId) {
+    const imagePreview = document.getElementById(previewId);
+    const input = document.getElementById(inputId);
+
+    
+    input.value = '';
+    imagePreview.innerHTML = '';
+  }
+
+  document.getElementById('productImage1Remove').addEventListener('click', function () {
+    removeImage('productImage1', 'imagePreview1');
+  });
+  function removeImage(inputId, previewId) {
+    const imagePreview = document.getElementById(previewId);
+    const input = document.getElementById(inputId);
+
+    // Clear input value and reset image preview
+    input.value = '';
+    imagePreview.innerHTML = '';
+  }
+
+  // Add event listeners for remove buttons
+  document.getElementById('productImage1Remove').addEventListener('click', function () {
+    removeImage('productImage2', 'imagePreview2');
+  });function removeImage(inputId, previewId) {
+    const imagePreview = document.getElementById(previewId);
+    const input = document.getElementById(inputId);
+
+    // Clear input value and reset image preview
+    input.value = '';
+    imagePreview.innerHTML = '';
+  }
+
+  // Add event listeners for remove buttons
+  document.getElementById('productImage1Remove').addEventListener('click', function () {
+    removeImage('productImage3', 'imagePreview3');
+  });function removeImage(inputId, previewId) {
+    const imagePreview = document.getElementById(previewId);
+    const input = document.getElementById(inputId);
+
+    // Clear input value and reset image preview
+    input.value = '';
+    imagePreview.innerHTML = '';
+  }
+
+  // Add event listeners for remove buttons
+  document.getElementById('productImage1Remove').addEventListener('click', function () {
+    removeImage('productImage4', 'imagePreview4');
+  });
+  function removeImage(inputId, previewId) {
+    const imagePreview = document.getElementById(previewId);
+    const input = document.getElementById(inputId);
+
+    // Clear input value and reset image preview
+    input.value = '';
+    imagePreview.innerHTML = '';
+  }
+
+  // Add event listeners for remove buttons
+  document.getElementById('productImage1Remove').addEventListener('click', function () {
+    removeImage('productImage5', 'imagePreview5');
+  });
+</script>
+
+<script>
+  function updateImagePreview(inputId, previewId) {
+    const imagePreview = document.getElementById(previewId);
+    const input = document.getElementById(inputId);
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.classList.add('preview-image');
+        img.style.width = '100px';
+        img.style.height = '100px';
+        imagePreview.innerHTML = '';
+        imagePreview.appendChild(img);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      imagePreview.innerHTML = '';
+    }
+  }
+
+  document.getElementById('productImage1').addEventListener('change', function () {
+    updateImagePreview('productImage1', 'imagePreview1');
+  });
+  document.getElementById('productImage2').addEventListener('change', function () {
+    updateImagePreview('productImage2', 'imagePreview2');
+  });
+  document.getElementById('productImage3').addEventListener('change', function () {
+    updateImagePreview('productImage3', 'imagePreview3');
+  });
+  document.getElementById('productImage4').addEventListener('change', function () {
+    updateImagePreview('productImage4', 'imagePreview4');
+  });
+  document.getElementById('productImage5').addEventListener('change', function () {
+    updateImagePreview('productImage5', 'imagePreview5');
+  });
+
+  document.getElementById('addVariant').addEventListener('click', function () {
+    var index = document.querySelectorAll('#variantSection .variant-row').length;
+    var newVariantSection = document.querySelector('#variantSection .variant-row').cloneNode(true);
+
+    newVariantSection.setAttribute('data-variant-index', index);
+
+    newVariantSection.querySelector('button').removeAttribute('disabled');
+
+    document.getElementById('variantSection').appendChild(newVariantSection);
+  });
+
+  function removeVariant(button) {
+    var variantSection = document.getElementById('variantSection');
+
+    
+    if (variantSection.querySelectorAll('.variant-row').length > 1) {
+     
+      button.closest('.variant-row').remove();
+    }
+  }
+
+
+//   const errorMessage = '<%= errorMessage %>';
+
+// if (errorMessage!==false) {
+//   const productNameField = document.getElementById('productname');
+//   const errorAlert = document.createElement('div');
+//   errorAlert.classList.add('alert', 'alert-danger', 'mt-2');
+//   errorAlert.textContent = errorMessage;
+//   productNameField.parentNode.appendChild(errorAlert);
+
+//   setTimeout(function () {
+//       errorAlert.remove();
+//     }, 4000);
+//   }
+
+  
+document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const productName = document.getElementById('productname').value.trim().toLowerCase();
+            if (productName === '' || productName.includes('black')) {
+                displayValidationMessage('Please enter a valid product name.');
+                return;
+            }
+
+            const colour = document.getElementById('colour').value.trim();
+            if (colour === '' || /\d/.test(colour)) {
+                displayValidationMessage('Please enter a valid colour (text only, no numbers).');
+                return;
+            }
+
+            const price = document.getElementById('price').value.trim();
+            if (price === '' || isNaN(price) || parseFloat(price) < 0) {
+                displayValidationMessage('Please enter a valid price (at least 0).');
+                return;
+            }
+
+            const variants = document.querySelectorAll('#variantSection .variant-row');
+            if (variants.length === 0) {
+                displayValidationMessage('Please add at least one variant.');
+                return;
+            }
+
+            for (const variant of variants) {
+                const size = variant.querySelector('input[name="variant[size][]"]').value.trim();
+                if (size === '') {
+                    displayValidationMessage('Please enter a valid size for all variants.');
+                    return;
+                }
+
+                const quantity = variant.querySelector('input[name="variant[quantity][]"]').value.trim();
+                if (quantity === '' || isNaN(quantity) || parseInt(quantity) < 0) {
+                    displayValidationMessage('Please enter a valid quantity for all variants (at least 0).');
+                    return;
+                }
+            }
+
+            form.submit();
+        });
+
+        function displayValidationMessage(message) {
+            const errorContainer = document.getElementById('errorContainer');
+
+            // Clear existing error messages
+            errorContainer.innerHTML = '';
+
+            // Create a span element for the error message
+            const errorMessage = document.createElement('span');
+            errorMessage.classList.add('error-message');
+            errorMessage.textContent = message;
+
+            // Append the span to the error container
+            errorContainer.appendChild(errorMessage);
+
+            // Optional: You can add styling or animations to make the error messages more noticeable
+        }
+    });
+
+
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     const form = document.querySelector('form');
+
+//     form.addEventListener('submit', function (event) {
+//         event.preventDefault();
+
+//         const productName = document.getElementById('productname').value.trim().toLowerCase();
+//         if (productName === '' || productName.includes('black')) {
+//             displayValidationMessage('Please enter a valid product name.');
+//             return;
+//         }
+
+//         const colour = document.getElementById('colour').value.trim();
+//         if (colour === '' || /\d/.test(colour)) {
+//             displayValidationMessage('Please enter a valid colour (text only, no numbers).');
+//             return;
+//         }
+
+//         const price = document.getElementById('price').value.trim();
+//         if (price === '' || isNaN(price) || parseFloat(price) < 0) {
+//             displayValidationMessage('Please enter a valid price (at least 0).');
+//             return;
+//         }
+
+//         const variants = document.querySelectorAll('#variantSection .variant-row');
+//         if (variants.length === 0) {
+//             displayValidationMessage('Please add at least one variant.');
+//             return;
+//         }
+
+//         for (const variant of variants) {
+//             const size = variant.querySelector('input[name="variant[size][]"]').value.trim();
+//             if (size === '') {
+//                 displayValidationMessage('Please enter a valid size for all variants.');
+//                 return;
+//             }
+
+//             const quantity = variant.querySelector('input[name="variant[quantity][]"]').value.trim();
+//             if (quantity === '' || isNaN(quantity) || parseInt(quantity) < 0) {
+//                 displayValidationMessage('Please enter a valid quantity for all variants (at least 0).');
+//                 return;
+//             }
+//         }
+
+//         form.submit();
+//     });
+
+//     function displayValidationMessage(message) {
+//         const existingAlerts = document.querySelectorAll('.alert');
+//         existingAlerts.forEach(alert => alert.remove());
+
+//         const validationMessage = document.createElement('div');
+//         validationMessage.classList.add('alert', 'alert-danger', 'mt-3');
+//         validationMessage.textContent = message;
+
+   
+//         form.appendChild(validationMessage);
+
+//         setTimeout(function () {
+//             validationMessage.remove();
+//         }, 4000);
+//     }
+// });
+
+
+</script>
+
+<%- include('../partials/adminFooter')%>

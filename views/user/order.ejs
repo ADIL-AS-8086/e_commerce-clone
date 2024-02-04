@@ -1,0 +1,599 @@
+<%- include('../partials/usernav')%>
+
+
+    <link rel="stylesheet" href="/style/orderhistory.css">
+    <div class="container mt-5">
+        <div class="row justify-content-start">
+
+            <% orders.forEach(order=> { %>
+                <div class="col-md-8 mt-5" style="width: 100rem;">
+                    <div class="card mx-auto"
+                        style="max-width: 120rem; border: 2px solid var(--Neutral-Gray-Gray-50, #f0f1f3); height: auto;">
+                        <div class="_card-body ">
+                            <div class="d-flex justify-content-between p-3">
+                                <h5 class="card-title text-start">Order List</h5>
+                                <h5 class="products text-end" style="width: 100px;">product</h5>
+                            </div>
+
+                            <div class="gray-bar">
+                                <div class="row">
+                                    <div class="col">
+                                        Product
+                                    </div>
+                                    <div class="col" style="margin-left: 160px;">Quantity</div>
+                                    <div class="col">Price</div>
+                                    <div class="col">Total</div>
+                                </div>
+                            </div>
+
+                            <!-- Check if order.Items exists and is an array -->
+                            <% if (order.Items && Array.isArray(order.Items)) { %>
+                                <!-- Iterate through order.Items array to display product details -->
+                                <% order.Items.forEach(item=> { %>
+                                    <div class="img-container">
+                                        <img src="/productimages/<%= item.productId.images[0]?.filename %>"
+                                            alt="<%= item.productId.productName %>">
+                                        <h6>
+                                            <%= item.productId.name %>
+                                        </h6>
+                                    </div>
+                                    <div class="text-container">
+
+                                        <p class="stock-container">
+                                            <%= item.quantity %> pcs
+                                        </p>
+                                    </div>
+                                    <div class="text-container">
+                                        <% if (item.offer) { %>
+                                            <p class="price-container">
+                                                <span style="background-color: yellow; color: black;">
+                                                    <%= item.orderingprice %>
+                                                </span>
+                                            </p>
+                                            <p class="price-container">
+                                                <span
+                                                    style="background-color: yellow; color: black; margin-left: 100px; ">
+                                                    <%= item.offer %>%
+                                                </span>
+                                            </p>
+
+                                            <p class="price-container"
+                                                style="text-decoration: line-through; margin-left: 380px; ">
+                                                <%= item.productId.price %>
+                                            </p>
+
+                                            <% } else { %>
+                                                <p class="price-container" style="font-weight: bold;">
+                                                    <%= item.orderingprice %>
+                                                </p>
+                                                <% } %>
+                                    </div>
+                                    <div class="text-container">
+                                        <p class="total-container">
+                                            <%= item.quantity * item.orderingprice %>
+                                        </p>
+
+
+                                        <p style="font-weight: bold;">orderID :<%= order._id %>
+                                        </p>
+                                        <% if (order.Status !=='cancelled' ) { %>
+                                            <% if (order.Status !=='rejected' ) { %>
+                                                <% if (order.Status !=='delivered' ) { %>
+                                                    <% if(order.Status !=='Return Pending'){%>
+                                                        <% if(order.Status !=='Return Rejected'){%>
+                                                            <% if(order.Status !=='Return Accepted'){%>
+                                                    <button type="button" class="btns cancel-order-btn"
+                                                        data-order-id="<%= order._id %>">
+                                                        <span><i class="fa-solid fa-ban fa-beat"
+                                                                style="color: #000000;"></i></span>CANCEL ORDER
+                                                    </button>
+                                                    
+                                                    <%}else{%>
+                                                        <button type="button" class="btns" style="background-color: #ffffff; color: #ff0000; font-weight: bold;"
+                                                        data-bs-toggle="modal" data-bs-target="#returnupdates<%= order._id %>">
+                                                        <span><i class="fa-solid fa-ban fa-beat"
+                                                                style="color: #b01d1d;"></i></span> ORDER RETURNED CLICK FOR UPDATES
+                                                    </button>
+
+
+                                                    <div class="modal fade" id="returnupdates<%= order._id %>"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog ">
+                                                          <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <h5 class="modal-title" id="returnupdates">Return Order Status</h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <% if(order.Status=='Return Pending'){%>
+                                                                <h6>
+                                                              <span style="margin-left: 50px; font-weight: bolder;"><i class="fa-solid fa-right-left" style="color: #000000;"></i>RETURN STATUS</span>: <span></span><span style="margin-left: 20px; color: #ff0000;" ><%=order.Status%> </span></h6>
+                                                              <%}else{%>
+                                                              <h6>
+                                                                <span style="margin-left: 50px; font-weight: bolder;"><i class="fa-solid fa-right-left" style="color: #000000;"></i>RETURN STATUS</span>: <span></span><%=order.Status%> <span style="margin-left: 20px;"></span></h6>
+
+                                                                <h6 style="margin-top: 20px; margin-left: 20px;">Amount  credited to your vallet</h6>
+                                                                <%}%>
+                                                            <div class="modal-footer">
+                                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    <%}%>
+                                                    <%}else{%>
+                                                        <button type="button" class="btns" style="background-color: #ffffff; color: #ff0000; font-weight: bold;"
+                                                        data-bs-toggle="modal" data-bs-target="#returnupdates<%= order._id %>">
+                                                        <span><i class="fa-solid fa-ban fa-beat"
+                                                                style="color: #b01d1d;"></i></span> ORDER RETURNED CLICK FOR UPDATES
+                                                    </button>
+
+
+                                                    <div class="modal fade" id="returnupdates<%= order._id %>"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog ">
+                                                          <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <h5 class="modal-title" id="returnupdates">Return Order Status</h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <% if(order.Status=='Return Pending'){%>
+                                                                <h6>
+                                                              <span style="margin-left: 50px; font-weight: bolder;"><i class="fa-solid fa-right-left" style="color: #000000;"></i>RETURN STATUS</span>: <span></span><span style="margin-left: 20px; color: #ff0000;" ><%=order.Status%> </span></h6>
+                                                              <%}else{%>
+                                                              <h6>
+                                                                <span style="margin-left: 50px; font-weight: bolder;"><i class="fa-solid fa-right-left" style="color: #000000;"></i>RETURN STATUS</span>: <span></span><%=order.Status%> <span style="margin-left: 20px;"></span></h6>
+
+                                                                <h6 style="margin-top: 20px; margin-left: 20px;">Amount  credited to your vallet</h6>
+                                                                <%}%>
+                                                            <div class="modal-footer">
+                                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    <%}%>
+                                                    <%}else{%>
+                                                        <button type="button" class="btns" style="background-color: #ffffff; color: #ff0000; font-weight: bold;"
+                                                        data-bs-toggle="modal" data-bs-target="#returnupdates<%= order._id %>">
+                                                        <span><i class="fa-solid fa-ban fa-beat"
+                                                                style="color: #b01d1d;"></i></span> ORDER RETURNED CLICK FOR UPDATES
+                                                    </button>
+
+
+                                                    <div class="modal fade" id="returnupdates<%= order._id %>"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog ">
+                                                          <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <h5 class="modal-title" id="returnupdates">Return Order Status</h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                           
+                                                                <h6>
+                                                           
+                                                         
+                                                              <h6>
+                                                                <span style="margin-left: 50px; font-weight: bolder;"><i class="fa-solid fa-right-left" style="color: #000000;"></i>RETURN STATUS</span>: <span></span><%=order.Status%> <span style="margin-left: 20px;"></span></h6>
+
+                                                                <h6 style="margin-top: 20px; margin-left: 20px;">Amount  credited to your vallet</h6>
+                                                               
+                                                            <div class="modal-footer">
+                                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    <%}%>
+                                                    <% } else { %>
+                                                        <button type="button" class="btns return-order-btn" data-bs-toggle="modal" data-bs-target="#returnOrderModal<%= order._id %>">
+
+                                                            <span style="margin-left: 10px;"><i
+                                                                    class="fa-solid fa-right-left"
+                                                                    style="color: #000000;"></i></span>RETURN ORDER
+                                                        </button>
+
+                                                        <br><br>  <button type="button" class="btn btn-dark m-2" onclick="generateAndDownloadInvoice('<%= order._id %>')">
+                                                            Download Invoice
+                                                        </button>
+
+                                                               
+
+                            <div class="modal fade" id="returnOrderModal<%= order._id %>"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+                                <div class="modal-dialog ">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <label for="returnReason">Reason for Return:</label>
+                                      <textarea id="returnReason<%= order._id %>" class="form-control" rows="3"></textarea>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-primary" onclick="submitReturn('<%= order._id %>')">Submit Return</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                                                     
+
+                                                        <% } %>
+                                                            <% } %>
+                                                                <% } %>
+
+                                    </div>
+                                    <% }); %>
+                                        <% } else { %>
+
+                    
+                                            <p>No items available for this order.</p>
+                                            <% } %>
+
+                                                <div class="text-container">
+                                                    <p class="total-container" style="margin-top: 30px;">
+                                                        <span>DELIVERY</span>: Free
+                                                    </p>
+                                                </div>
+
+
+
+                                                <span style="margin-left: 30px; font-weight: bold;">PaymentMethod :
+                                                    <%=order.PaymentMethod%></span><br>
+                                                <span style="margin-left: 30px; font-weight: bold;">PaymentStatus : <%=
+                                                        order.PaymentStatus%></span>
+
+
+
+
+
+                                                <hr>
+                                                <div class="text-container">
+                                                    <p class="total-container" style="margin-top: 5px;">
+                                                        <span>SUB TOTAL</span>: <%= order.TotalPrice %>
+                                                    </p>
+                                                </div>
+                                                <br>
+                                                <br>
+                                                <div class="text-container">
+                                                    <p class="total-container">
+                                                        <span>TOTAL</span>: <%= order.TotalPrice %>
+                                                    </p>
+                                                </div>
+                                                <br><br>
+                                                <!-- <div
+                                                    class="d-flex flex-row justify-content-between align-items-center align-content-center">
+
+                                                    <%if(order.Status === 'Order Placed'){%>
+                                                        <span class="dot"></span>
+                                                    <hr class="flex-fill"><span class="dot"></span>
+
+                                                    <hr class="flex-fill"><span class="dot"></span>
+                                                    <hr class="flex-fill"><span class="dot"></span>
+
+                                                    <hr class="flex-fill">
+                                                     <span
+                                                        class="d-flex justify-content-center align-items-center big-dot dot">
+                                                        <i class="fa fa-check text-white"></i></span> -->
+                                                <!-- <%}%> -->
+                                                <!-- <span class="dot"></span>
+                                                    <hr class="flex-fill track-line"><span class="dot"></span>
+                                                    <hr class="flex-fill track-line"><span class="dot"></span>
+                                                    <hr class="flex-fill track-line"><span class="dot"></span>
+
+                                                    <hr class="flex-fill track-line"><span
+                                                        class="d-flex justify-content-center align-items-center big-dot dot">
+                                                        <i class="fa fa-check text-white"></i></span> -->
+                                                <!-- </div> -->
+                                                <div
+                                                    class="d-flex flex-row justify-content-between align-items-center align-content-center">
+
+                                                    <% if (order.Status==='rejected' ) { %>
+
+                                                        <span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                                        <p style="margin-top: 0px; font-weight: bolder;">order cancled
+                                                            by admin</p>
+                                                        <%} else if (order.Status==='Order Placed' ) { %>
+                                                            <span class="dot"></span>
+                                                            <hr class="flex-fill"><span class="dot"></span>
+                                                            <hr class="flex-fill"><span class="dot"></span>
+                                                            <hr class="flex-fill"><span class="dot"></span>
+                                                            <hr class="flex-fill">
+                                                            <% } else if (order.Status==='processing' ) { %>
+                                                                <span class="dot"></span>
+                                                                <hr class="flex-fill track-line"><span
+                                                                    class="dot"></span>
+                                                                <hr class="flex-fill"><span class="dot"></span>
+                                                                <hr class="flex-fill"><span class="dot"></span>
+                                                                <hr class="flex-fill">
+                                                                <% } else if (order.Status==='packed' ) { %>
+                                                                    <span class="dot"></span>
+                                                                    <hr class="flex-fill track-line"><span
+                                                                        class="dot"></span>
+                                                                    <hr class="flex-fill track-line"><span
+                                                                        class="dot"></span>
+                                                                    <hr class="flex-fill"><span class="dot"></span>
+                                                                    <hr class="flex-fill">
+                                                                    <% } else if (order.Status==='shipped' ) { %>
+                                                                        <span class="dot"></span>
+                                                                        <hr class="flex-fill track-line"><span
+                                                                            class="dot"></span>
+                                                                        <hr class="flex-fill track-line"><span
+                                                                            class="dot"></span>
+                                                                        <hr class="flex-fill track-line"><span
+                                                                            class="dot"></span>
+                                                                        <hr class="flex-fill">
+                                                                        <% } else if (order.Status==='delivered' ) { %>
+                                                                            <span class="dot"></span>
+                                                                            <hr class="flex-fill track-line"><span
+                                                                                class="dot"></span>
+                                                                            <hr class="flex-fill track-line"><span
+                                                                                class="dot"></span>
+                                                                            <hr class="flex-fill track-line"><span
+                                                                                class="dot"></span>
+                                                                            <hr class="flex-fill track-line">
+                                                                            <span
+                                                                                class="d-flex justify-content-center align-items-center big-dot dot">
+                                                                                <i
+                                                                                    class="fa fa-check text-white"></i></span>
+
+                                                                            <% } else if (order.Status==='Return Pending' ) { %>
+                                                                                <span class="dot"></span>
+                                                                                <hr class="flex-fill track-line"><span
+                                                                                    class="dot"></span>
+                                                                                <hr class="flex-fill track-line"><span
+                                                                                    class="dot"></span>
+                                                                                <hr class="flex-fill track-line"><span
+                                                                                    class="dot"></span>
+                                                                                <hr class="flex-fill track-line">
+                                                                                <span
+                                                                                    class="d-flex justify-content-center align-items-center big-dot dot">
+                                                                                    <i
+                                                                                        class="fa fa-check text-white"></i></span>
+                                                                                        <%}%>
+
+                                                </div>
+
+
+                                                <div class="d-flex flex-row justify-content-between align-items-center">
+                                                    <% if (order.Status !=='cancelled' ) { %>
+                                                        <% if (order.Status !=='rejected'  ) { %>
+                                                            
+                                                            <div class="d-flex flex-column align-items-start">
+                                                                <span>
+                                                                    <% var dt=new Date(order.OrderDate); %>
+                                                                        <%= dt.getDate() %>/<%= dt.getMonth() + 1 %>/<%=
+                                                                                    dt.getFullYear() %>
+                                                                </span>
+                                                                <span>
+                                                                    <i class="fa-solid fa-cart-plus"></i><span
+                                                                        style="font-weight: bold;">Order placed</span>
+                                                                </span>
+                                                            </div>
+
+                                                            <div class="d-flex flex-column justify-content-center">
+                                                                <span></span>
+                                                                <span>
+                                                                    <i class="fa-solid fa-arrows-rotate"></i><span
+                                                                        style="font-weight: bold;">processing</span>
+                                                                </span>
+                                                            </div>
+
+                                                            <div
+                                                                class="d-flex flex-column justify-content-center align-items-center">
+                                                                <span></span>
+                                                                <span>
+                                                                    <i class="fa-solid fa-cubes-stacked"></i><span
+                                                                        style="font-weight: bold;">Packed</span>
+                                                                </span>
+                                                            </div>
+
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <span></span>
+                                                                <span>
+                                                                    <i class="fa-solid fa-truck-fast"></i><span
+                                                                        style="font-weight: bold;">shipped</span>
+                                                                </span>
+                                                            </div>
+
+                                                            <div class="d-flex flex-column align-items-end">
+                                                                <span>
+                                                                    <% var dt=new Date(order.DeliveryDate); %>
+                                                                        <%= dt.getDate() %>/<%= dt.getMonth() + 1 %>/<%=
+                                                                                    dt.getFullYear() %>
+                                                                </span>
+                                                                <span>
+                                                                    <i class="fa-solid fa-check"></i><span
+                                                                        style="font-weight: bold;">Delivered</span>
+                                                                </span>
+                                                            </div>
+                                                            <% } %>
+                                                                <% } else { %>
+                                                                    <p class="ordrercanceltext">ORDER CANCELELLED BY YOU
+                                                                    </p>
+                                                                    <% } %>
+                                                </div>
+
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+        </div>
+
+    </div>
+    <br><br>
+
+
+
+
+
+
+    </div>
+    </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('.........................,,,,,,,,,,,,mmmmmmmmmmmmmmmmzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
+
+            const cancelOrderButtons = document.querySelectorAll('.cancel-order-btn');
+
+            cancelOrderButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const orderId = button.getAttribute('data-order-id');
+
+                    // Use SweetAlert for confirmation
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Do you really want to cancel this order?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, cancel it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/user/cancel-order/${orderId}`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data);
+
+                                    Swal.fire({
+                                        title: 'Order Cancelled!',
+                                        text: 'Your order has been cancelled successfully.',
+                                        icon: 'success'
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+
+                                    if (data.success) {
+                                        Toastify({
+                                            text:"Amount Refunded to Wallet ",
+                                            className: "info",
+                                            position: 'center',
+                                            gravity: "top",
+                                            duration: 3000,
+                                            style: {
+                                                background: "white",
+                                                color: "#000",
+                                                marginTop: "80px",
+                                            }
+                                        }).showToast();
+
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error cancelling order:', error);
+
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'An error occurred while cancelling the order. Please try again later.',
+                                        icon: 'error'
+                                    });
+                                });
+                        }
+                    });
+                });
+            });
+        });
+
+
+        function submitReturn(orderIdParam) {
+    const returnReason = document.getElementById(`returnReason${orderIdParam}`).value;
+    const orderId = orderIdParam; 
+console.log(returnReason);
+    fetch('/user/submitreturn', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        orderId: orderId,
+        returnReason: returnReason,
+      }),
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        
+        location.reload();
+      })
+      .catch((error) => {
+        console.error('Error submitting return reason:', error);
+      });
+
+    $('#returnOrderModal').modal('hide');
+  }
+
+
+
+  async function generateAndDownloadInvoice(orderId) {
+    console.log(orderId,'checking order id ');
+    let timerInterval
+Swal.fire({
+  title: 'Download Started!',
+  html: 'I will close in <b></b> milliseconds.',
+  timer: 4000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading()
+    const b = Swal.getHtmlContainer().querySelector('b')
+    timerInterval = setInterval(() => {
+      b.textContent = Swal.getTimerLeft()
+    }, 100)
+  },
+  willClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+  }
+})
+
+      try {
+          const response = await fetch('/user/downloadinvoice', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json', 
+              },
+
+              body: JSON.stringify({ orderId }) 
+              
+          });
+          console.log(orderId,'checking order id ');
+
+          if (response.ok) {
+            console.log("aaaaaaaaaaaaaaaa");
+            
+              window.location.href = `/user/downloadinvoice/${orderId}`;
+          }
+      } catch (error) {
+          console.error('Error in downloading the invoice:', error);
+      }
+  }
+
+
+
+
+
+    </script>
+
+
+
+    <%- include('../partials/userlogfoter')%>

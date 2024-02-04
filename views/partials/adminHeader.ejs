@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>admin</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Include SweetAlert CSS and JS from CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
+<script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
+
+  <style>
+    .nav-link.active {
+      color: black !important;
+    }
+
+    #sidebar {
+      overflow-y: auto;
+      height: 100vh; /* Set sidebar height to 100% of viewport height */
+      position: fixed;
+      width: 200px; /* Set the width as needed */
+      transition: 0.5s; /* Add transition for smoother animation */
+    }
+
+    .position-sticky {
+      margin-top: 20px; /* Add margin at the top */
+    }
+
+    .nav-item {
+      margin-bottom: 10px; /* Add margin between navigation items */
+    }
+
+    .logout-btn {
+      width: 100%; /* Make the button fill the sidebar width */
+      text-align: left; /* Align text to the left */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-white shadow">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <h1 class="mt-4" style="margin-left: -50px; font-weight: bolder; font-size: 30px;">SPECIMEN</h1>
+          <!-- Your page content goes here -->
+        </main>
+        <div class="position-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/dashboard">
+                <i class="fa-solid fa-house" style="color: #000000;"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/catogeryList">
+                <i class="fas fa-th-large"></i> Category
+            </a>
+                      
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/products">
+                <i class="fas fa-box"></i> Products
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/offer-list">
+                <i class="fas fa-tags"></i>product offer
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/order-list">
+                <i class="fas fa-shopping-cart"></i> Orders
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/users">
+                <i class="fas fa-users"></i> Customers
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/coupon-page">
+                <i class="fa-solid fa-vr-cardboard"></i> Coupon
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/refferal">
+                <i class="fa-solid fa-vr-cardboard"></i> Refferal
+              </a>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-light logout-btn"> Log Out
+          <span><i class="fa-solid fa-right-from-bracket" style="color: #000000;"></i></span>
+        </button>
+      </nav>
+
+      <!-- Main content -->
+
+    </div>
+  </div>

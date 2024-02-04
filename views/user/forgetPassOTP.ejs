@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .otp-container {
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+      height: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      border-radius: 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    p {
+      font-size: 10px;
+      margin-bottom: 10px;
+      margin-top: 100px;
+    }
+
+    button {
+      background-color: #b7b2b2;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      opacity: 0.5;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+    }
+
+    button:not(:disabled) {
+      background-color: #4CAF50;
+    }
+
+    #error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .otp-container {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="otp-container">
+  <h2>Enter OTP</h2>
+  <form id="otp-form" action="/user/verifyPasswordOtp" method="post">
+    <% if(message){%>
+      <h6 style="color: red;"><%=message%></h6>
+      <%}%>
+    <label for="otp">OTP:</label>
+    <input type="text" id="otp" name="otp" maxlength="4" oninput="validateInput()" required>
+    <input type="hidden" name="email"  value="<%=email%>">
+
+ 
+
+  <div id="error-message"></div>
+
+  <button type="submit" class="btn btn-primary" id="resendButton" onclick="resendOTP()" disabled>Resend OTP</button>
+  <span id="timer" style="margin-left: 10px;"></span>
+
+
+
+  <p>By clicking Verify OTP, I agree to the <a href="#">Terms and Conditions</a>, <br> <a href="#">Privacy Policy</a>, and <a href="#">Service Management</a>.</p>
+
+  <button type="submit" id="verifyButton" disabled>Verify OTP</button>
+</div>
+</form>
+<script>
+  function validateInput() {
+    var otpInput = document.getElementById("otp");
+    var verifyButton = document.getElementById("verifyButton");
+    var errorMessage = document.getElementById("error-message");
+
+    // Remove non-numeric characters
+    otpInput.value = otpInput.value.replace(/\D/g, '');
+
+    // Check if the input contains exactly 4 digits
+    if (otpInput.value.length === 4) {
+      verifyButton.disabled = false;
+      errorMessage.textContent = ''; // Clear error message
+    } else {
+      verifyButton.disabled = true;
+      errorMessage.textContent = 'Please enter a valid 4-digit OTP';
+    }
+  }
+
+  function startCountdown() {
+      var resendButton = document.getElementById("resendButton");
+      var timerDisplay = document.getElementById("timer");
+      var countdown = 10;
+
+      resendButton.disabled = true;
+
+      var countdownInterval = setInterval(function() {
+        countdown--;
+        timerDisplay.textContent = "Resend OTP in " + countdown + "s";
+
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          timerDisplay.textContent = "";
+          resendButton.textContent = "Resend OTP";
+          // resendButton.disabled = false;
+          resendButton.disabled = false;
+        }
+      }, 1000); // Update every 1000ms (1 second)
+    }
+
+    // Call the function when the page loads
+    window.onload = startCountdown;
+
+
+  function resendOTP() {
+    
+    // Call the server-side e ndpoint to resend OTP
+    fetch("/user/resendotp", {
+      method: "POST",
+      body: JSON.stringify({ email: "<%=email%>" }), 
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("OTP Resent successfully:", data);
+    })
+    .catch(error => {
+      console.error("Error during OTP resend:", error);
+    });
+  }
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<%- include('../partials/adminHeader')%>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .details {
+        margin: 20px;
+    }
+
+    .recentOrders {
+        background-color: #ffffff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 1000px;
+    }
+
+    table {
+        width: 80%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        margin-left: 150px;
+    }
+
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .userCardContainer {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+        margin-left: 150px;
+    }
+
+    .userCard {
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: 200px;
+        width: 200px;
+        flex: 1;
+        margin-right: 20px;
+    }
+
+    .userCard h2 {
+        margin-bottom: 10px;
+    }
+
+    .userCard i {
+        font-size: 24px;
+        margin-right: 5px;
+    }
+
+    .active {
+      
+        color: rgb(40, 188, 80);
+        
+    }
+
+    .blocked {
+         color: rgb(255, 68, 0);
+    }
+</style>
+
+<script>
+    function toggleStatus(row) {
+        var statusCell = row.querySelector('.status');
+        if (statusCell.classList.contains('active')) {
+            statusCell.classList.remove('active');
+            statusCell.classList.add('blocked');
+            statusCell.textContent = 'blocked';
+            // Add logic for block functionality here
+        } else {
+            statusCell.classList.remove('blocked');
+            statusCell.classList.add('active');
+            statusCell.textContent = 'active';
+            // Add logic for unblock functionality here
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var statusCells = document.querySelectorAll('.status');
+        statusCells.forEach(function (cell) {
+            cell.addEventListener('click', function () {
+                var row = cell.parentElement;
+                toggleStatus(row);
+            });
+        });
+    });
+</script>
+
+<div class="detail" style="margin-left: 100px;">
+    <div class="recentOrders">
+        <div class="cardHeader" style="margin-left: 130px;">
+            <h1>Customers</h1>
+        </div>
+
+        <div class="userCardContainer">
+            <div class="userCard">
+                <h2 style="color: rgb(0, 21, 255); font-weight: bold;">Total Users</h2>
+                <i class="fas fa-users"></i>
+                <p class="active" style="font-weight: bold;">Count: <%= totalUsersCount %></p>
+            </div>
+        
+            <div class="userCard">
+                <h2 style="color: green; font-weight: bold;">Active Users</h2>
+                <i class="fas fa-user-check"></i>
+                <p class="active"style="font-weight: bold;">Count: <%= activeUsersCount %></p>
+            </div>
+        
+            <div class="userCard">
+                <h2 style="color: rgb(255, 14, 14); font-weight: bold;">Blocked Users</h2>
+                <i class="fas fa-user-times"></i>
+                <p class="blocked" style="font-weight: bold;">Count: <%= blockedUsersCount %></p>
+            </div>
+        </div>
+        
+
+        <table>
+            <thead>
+                <tr>
+                    <td>No</td>
+                    <td>email</td>
+                    <td>name</td>
+                    <td>date</td>
+                    <td class="header">status</td>
+                    <td>action</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% var i = 0; %>
+                <% userData.forEach((data)=>{ %>
+                    <tr>
+                      <td>
+                        <%=++i%>
+                      </td>
+                      <td style="font-weight: bold;">
+                        <%=data.username%>
+                      </td>
+                      <td>
+                        <%=data.email%>
+                      </td>
+                      <td>
+                        <% var dt = new Date(data.date); %>
+                        <%= dt.getDate() %>/<%= dt.getMonth() + 1 %>/<%= dt.getFullYear() %>
+                      </td>                      
+                      <td
+                        class="<%= data.status ? 'text-success fw-bold' : 'text-danger fw-bold' %> table-white ">
+                          <% if (data.status) { %>
+                          <% value='Active'; %>
+                          <% } else { %>
+                          <% value='Inactive'; %>
+                          <% } %>
+                          <%= value %>
+                      </td>
+                      <td>
+                        <% if (data.status) { %>
+                          <!-- If user is active, provide option to block -->
+                          <form action="/admin/block/<%- data._id %>" method="POST">
+                            <button type="submit" class="text-white font-size btn btn-danger px-3 py-0"
+                              onclick="return confirm('Are you sure you want to block <%=data.username%>?')">Block</button>
+                          </form>
+                          <% } else { %>
+                            <form action="/admin/unblock/<%- data._id %>" method="post">
+                              <button type="submit" class="text-white font-size btn btn-primary px-3 py-0"
+                                onclick="return confirm('Are you sure you want to un-block <%=data.username%>?')">Unblock</button>
+                            </form>
+                            <% } %>
+                      </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<%- include('../partials/adminFooter')%>
+
+
+   
