@@ -11,7 +11,7 @@ const credentail={
 }
 
 const adminpage = (req, res) => {
-    res.render('./admin/adminHome');
+    res.render('./admin/adminhome');
 };
 
 const login= (req,res) =>{
@@ -24,9 +24,9 @@ const loginPost=(req,res)=>{
         console.log(email,pass,'.....................................');
         if(credentail.email==email && credentail.password==pass){
             req.session.adminlogged=true
-            res.render('./admin/adminHome');
+            res.render('./admin/adminhome');
         }else{
-            res.render('./admin/adminLogin',{error:'password or email wrong'})
+            res.render('./admin/adminlogin',{error:'password or email wrong'})
         }
     } catch (error) {
         console.error(error)
@@ -89,7 +89,7 @@ const unBlockUser=async(req,res)=>{
 
 
 const isAdmin = (req, res) => {
-    res.render('admin/adminDash')
+    res.render('admin/admindash')
   }
 
 
