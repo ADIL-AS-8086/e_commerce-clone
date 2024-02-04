@@ -14,7 +14,7 @@ module.exports = {
 
       if (format === 'pdf') {
         const pdfOptions = {
-          path: `public/SRpdf/sales-report-${formattedStartDate}-${formattedEndDate}.pdf`,
+          path: `/home/ubuntu/e_commerce-clone//SRpdf//sales-report-${formattedStartDate}-${formattedEndDate}.pdf`,
         };
 
         const doc = new PDFDocument();
@@ -79,7 +79,7 @@ module.exports = {
 
         worksheet.addRow({ slno: '', orderId: '', orderDate: '', paymentMethod: '', amount: '',total: (totalAmount || 0).toFixed(2) });
 
-        const excelFilePath = `/public/SRexcel/sales-report-${formattedStartDate}-${formattedEndDate}.xlsx`;
+        const excelFilePath = `/home/ubuntu/e_commerce-clone//SRexcel//sales-report-${formattedStartDate}-${formattedEndDate}.xlsx`;
         await workbook.xlsx.writeFile(excelFilePath);
 
         res.status(200).download(excelFilePath);
