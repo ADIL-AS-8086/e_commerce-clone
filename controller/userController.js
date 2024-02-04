@@ -478,7 +478,7 @@ const adresspage = async (req, res) => {
   try {
     const email = req.session.email
     const addressData = await user.findOne({ email: email }) || { address: [] };
-    res.render('./user/adressManagment', { addressData })
+    res.render('./user/adressmanagment', { addressData })
 
 
   } catch (error) {
