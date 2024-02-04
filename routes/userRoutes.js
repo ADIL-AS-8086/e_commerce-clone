@@ -97,7 +97,6 @@ router.patch('/user/cancel-order/:orderId', userAuth.verifyUser,orderController.
 router.post('/user/submitreturn',userAuth.verifyUser,userController.submitReturn)
 
 
-
 router.get('/user/catogery-wise-page/:id', userAuth.verifyUser,userController.catogerywiseproductpage)
 
 router.get('/user/coupon-show', userAuth.verifyUser,couponController.showcoupon)
