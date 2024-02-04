@@ -10,13 +10,13 @@ const supportedFormats = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 
 const categoryListPage = async (req, res) => {
     var i = 0
     const categoryData = await category.find({ isDeleted: false })
-    res.render("./admin/CategoryList", { categoryData, i })
+    res.render("./admin/categorylist", { categoryData, i })
 }
 
 
 
 const    addCategorypage = (req, res) => {
-    res.render('./admin/addCategory',{ alertMessage: req.query.alertMessage || '' })
+    res.render('./admin/addcategory',{ alertMessage: req.query.alertMessage || '' })
 }
 
 const addCategory = async (req, res) => {
@@ -42,7 +42,7 @@ const addCategory = async (req, res) => {
         if (existingCategory) {
      
             const alertMessage = encodeURIComponent('Category name already exists');
-            return res.redirect('/admin/addCategory?alertMessage=' + alertMessage);
+            return res.redirect('/admin/addcategory?alertMessage=' + alertMessage);
         }
 
    
@@ -76,7 +76,7 @@ const editCategory = async (req, res) => {
     const alertMessage = req.query.alertMessage || '';
     const imageFormatError = req.query.imageFormatError || ''; 
 
-    res.render('./admin/editCategory', { categoryData, alertMessage, imageFormatError });
+    res.render('./admin/editcategory', { categoryData, alertMessage, imageFormatError });
 };
 
 
