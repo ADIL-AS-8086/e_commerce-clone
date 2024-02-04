@@ -195,6 +195,48 @@
     $('#editAddressModal').modal('show');
   }
 
+  function validateAndSubmitAddressForm() {
+    var name = $('#name').val().trim();
+    var address = $('#address').val().trim();
+    var city = $('#city').val().trim();
+    var state = $('#state').val().trim();
+    var pincode = $('#pincode').val().trim();
+    var mobile = $('#mobile').val().trim();
+
+    if (name === "") {
+      displayErrorMessage("Name cannot be empty.");
+      return;
+    }
+
+    if (address === "") {
+      displayErrorMessage("Address cannot be empty.");
+      return;
+    }
+
+    if (city === "") {
+      displayErrorMessage("City cannot be empty.");
+      return;
+    }
+
+    if (state === "") {
+      displayErrorMessage("State cannot be empty.");
+      return;
+    }
+
+    if (!/^\d{6}$/.test(pincode)) {
+      displayErrorMessage("Pincode must be 6 numbers.");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(mobile)) {
+      displayErrorMessage("Mobile number must be 10 numbers.");
+      return;
+    }
+
+    // If all validations pass, submit the form
+    document.getElementById('addAddressForm').submit();
+  }
+
   function validateAndSubmitEditAddressForm() {
     var name = $('#editName').val().trim();
     var address = $('#editAddress').val().trim();
@@ -204,33 +246,33 @@
     var mobile = $('#editMobile').val().trim();
 
     if (name === "") {
-        displayErrorMessage("Name cannot be empty.");
-        return;
+      displayErrorMessage("Name cannot be empty.");
+      return;
     }
 
     if (address === "") {
-        displayErrorMessage("Address cannot be empty.");
-        return;
+      displayErrorMessage("Address cannot be empty.");
+      return;
     }
 
     if (city === "") {
-        displayErrorMessage("City cannot be empty.");
-        return;
+      displayErrorMessage("City cannot be empty.");
+      return;
     }
 
     if (state === "") {
-        displayErrorMessage("State cannot be empty.");
-        return;
+      displayErrorMessage("State cannot be empty.");
+      return;
     }
 
     if (!/^\d{6}$/.test(pincode)) {
-        displayErrorMessage("Pincode must be 6 numbers.");
-        return;
+      displayErrorMessage("Pincode must be 6 numbers.");
+      return;
     }
 
     if (!/^\d{10}$/.test(mobile)) {
-        displayErrorMessage("Mobile number must be 10 numbers.");
-        return;
+      displayErrorMessage("Mobile number must be 10 numbers.");
+      return;
     }
 
     // If all validations pass, submit the form
@@ -238,41 +280,40 @@
     var formData = $('#editAddressForm').serialize();
 
     $.ajax({
-        type: 'POST',
-        url: `/user/editaddress/${addressId}`,
-        data: formData,
-        success: function (response) {
-            console.log("Edit address success:", response);
-            $('#editAddressModal').modal('hide');
-            location.reload();
-        },
-        error: function (error) {
-            console.error('Error editing address:', error);
-        }
+      type: 'POST',
+      url: `/user/editaddress/${addressId}`,
+      data: formData,
+      success: function (response) {
+        console.log("Edit address success:", response);
+        $('#editAddressModal').modal('hide');
+        location.reload();
+      },
+      error: function (error) {
+        console.error('Error editing address:', error);
+      }
     });
-}
+  }
 
-function displayErrorMessage(message) {
+  function displayErrorMessage(message) {
     var errorMessage = $('#addAddressErrorMessage');
     errorMessage.text(message);
     errorMessage.show();
     setTimeout(function () {
-        errorMessage.hide();
+      errorMessage.hide();
     }, 4000);
-}
+  }
 
-$(document).ready(function () {
+  $(document).ready(function () {
     $('#addAddressForm').submit(function (event) {
-        event.preventDefault();
-        validateAndSubmitAddressForm();
+      event.preventDefault();
+      validateAndSubmitAddressForm();
     });
 
     $('#editAddressForm').submit(function (event) {
-        event.preventDefault();
-        validateAndSubmitEditAddressForm();
+      event.preventDefault();
+      validateAndSubmitEditAddressForm();
     });
-});
-
+  });
 
   function deleteAddress(addressId) {
     Swal.fire({
