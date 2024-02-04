@@ -15,7 +15,7 @@ const adminpage = (req, res) => {
 };
 
 const login= (req,res) =>{
-res.render('./admin/adminLogin')
+res.render('./admin/adminlogin')
 }
 
 const loginPost=(req,res)=>{
