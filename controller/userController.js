@@ -147,10 +147,10 @@ const verifyOTP = async (req, res) => {
       console.log('otp saved.............');
 
       const{referralId}  =req.session;
-
+      console.log(referralId,'not working signup');
 
       ///////
-
+console.log('dfghjkl');
       if (referralId) {
         const referralAmount = await referral.findOne();
         const walletAmount = referralAmount.amount;
@@ -169,10 +169,12 @@ const verifyOTP = async (req, res) => {
         await walletTransaction.save();
       }
 
+
+      console.log('value is getting or note');
 ////////////////////
 
       try {
-
+console.log('getting inside the second try blocks o pyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
         await user.create({
           username: _name,
           email: _email,
@@ -224,6 +226,7 @@ const verifyOTP = async (req, res) => {
     console.error('Error during OTP verification:', error);
     return res.render('./user/otpuser', { email: _email, message: 'Error during OTP verification' });
   }
+
 };
 
 
