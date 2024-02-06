@@ -66,6 +66,7 @@ const signuppage = (req, res) => {
   console.log("@@@@@@@@@@@@@",referralId,"#############");
   res.render('./user/signup',{referralId});
 };
+
 const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -83,7 +84,7 @@ const signup = async (req, res) => {
     const userExist = await user.findOne({ email: email });
 
     if (userExist) {
-      return res.render('./user/signup', { message: 'Email already exists' });
+      return res.render('./user/signup',{ message: 'Email already exists'});
     }
 
     console.log('This is OTP sending..');

@@ -54,7 +54,7 @@
                   <button id="login-button" type="submit" class="btn btn-block form-control">SIGN UP</button>
               </div>
               
-              <% if (referralId) { %>
+              <% if (typeof referralId !== 'undefined') { %>
                 <input type="hidden" name="referralId" value="<%= referralId %>">
               <% } %>
 
