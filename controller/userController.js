@@ -87,6 +87,15 @@ const signup = async (req, res) => {
       return res.render('./user/signup',{ message: 'Email already exists'});
     }
 
+
+
+
+
+
+
+
+
+
     console.log('This is OTP sending..');
     const otpInfo = await sendOTP(email);
 
